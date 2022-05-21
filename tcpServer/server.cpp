@@ -11,48 +11,64 @@
 #define	SA	struct sockaddr
 
 int main(int argc, char **argv) {
-    int listenfd, connfd;
+    int listenret, connret,sockret,bindret;
     pid_t childpid;
     socklen_t clilen;
     struct sockaddr_in cliaddr, servaddr;
+    
     //Create a socket and bind the port of the server
-    listenfd = socket(AF_INET, SOCK_STREAM, 0); 
-    if(listenfd == -1) {
+    sockret = socket(AF_INET, SOCK_STREAM, 0); 
+    if(sockret == -1) {
         printf("Create socket error...\n");
         return -1;
     }
     printf("Create socket success...\n");
+   
     memset(&servaddr, 0,sizeof(servaddr)); 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(SERV_PORT);
-    bind((listenfd), (SA *)&servaddr, sizeof(servaddr)); 
+    
+    bindret = bind((listenret), (SA *)&servaddr, sizeof(servaddr)); 
+    if(bindret == -1) {
+        printf("Bind error...\n");
+        return -1;
+    }
     printf("Binding the port success...\n");
-    listen(listenfd, LISTENQ); 
+
+    listenret = listen(listenret, LISTENQ); 
+    if(listenret == -1) {
+        printf("Listening error...\n");
+        return -1;
+    }
     printf("Listening success...\n");
+
     printf("Waiting for client connection to complete...\n");
     for (;;) { 
         //waiting for connect
         clilen = sizeof(cliaddr);
+        
         //accept success 
-        connfd = accept(listenfd, (SA *)&cliaddr, &clilen); 
-        if(connfd == -1) {
+        connret = accept(listenret, (SA *)&cliaddr, &clilen); 
+        if(connret == -1) {
             printf("Accept error...\n");
             return -1;
         }
         printf("Connect success...\n");
+        
         //concurrent server
         if ((childpid = fork()) == 0) {
-            close(listenfd);
+            close(listenret);
             char file_len[16] = {0};   
             char file_name[128] = {0}; 
             //data buffer
             char buf[1024] = {0};      
             char filepath[2048] = {0};
+           
             //Read file size and file name
             //Read everything in accept into the memory pointed to by the buf pointer
-            int readfd = read(connfd, buf, sizeof(buf));  
-            if(readfd == -1) {
+            int readn = read(connret, buf, sizeof(buf));  
+            if(readn == -1) {
                 printf("Using function read error...\n");
                 return -1;
             }            
@@ -61,6 +77,7 @@ int main(int argc, char **argv) {
             //Get the file name
             strncpy(file_name, buf + sizeof(file_len), sizeof(file_name)); 
             printf("Ready to receive...... file name:[%s] file size:[%s] \n", file_name, file_len);
+            
             //new file name 
             //Write formatted data to a string
             sprintf(buf, "recv-%s", file_name);                  
@@ -70,28 +87,33 @@ int main(int argc, char **argv) {
             int fd = open(filepath, O_RDWR | O_CREAT | O_TRUNC, 0666);
             //file size
             int size = atoi(file_len); 
+            
             //Record the number of bytes written
-            int writen = 0;         
+            int wrote = 0;         
             //accept
             while (1) {
                 memset(buf,0,1024); 
-                int ret = read(connfd, buf, sizeof(buf));
-                if (ret <= 0) {
+                int readn = read(connret, buf, sizeof(buf));
+                if (readn = 0) {
                     printf("\n [recv-%s] trans finished...\n", file_name);
                     break;
+                }else if (readn < 0) {
+                    printf("trans error...\n");
+                    break;
                 }
-                int writefd = write(fd, buf, ret);
-                writen += ret; 
-                if(writefd == -1) {
+
+                int writen = write(fd, buf, readn);
+                if(writen == -1) {
                     printf("Using function write error...\n");
                     return -1;
-                }
+                } 
+                wrote += readn; 
                 //Dynamic output receive input
-                printf("Uploading %.2f%% \n", (float)writen / size * 100);
+                printf("Uploading %.2f%% \n", (float)wrote / size * 100);
             }
             return 0;
         }
 
-        close(connfd);
+        close(connret);
     }
 }
