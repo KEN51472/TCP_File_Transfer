@@ -47,7 +47,9 @@ int main(int argc, char **argv) {
     char file_name[128] = {0};
     strncpy(file_name, basename(file_path), sizeof(file_name));
     int fd = open(file_path, O_RDWR);
-    if (fd == -1) {
+    if (fd == 0) {
+        printf("Open [%s] success...\n",file_path);
+    }else if (fd == -1) {
         printf("Open [%s] error...\n", file_path);
         close(fd);
         return -1;
