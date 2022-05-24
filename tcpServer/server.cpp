@@ -16,7 +16,6 @@ int main(int argc, char **argv) {
     socklen_t clilen;
     struct sockaddr_in cliaddr, servaddr;
     
-    //Create a socket and bind the port of the server
     sock = socket(AF_INET, SOCK_STREAM, 0); 
     if (sock == -1) {
         printf("Create socket error...\n");
@@ -29,7 +28,6 @@ int main(int argc, char **argv) {
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(SERV_PORT);
     
-    //On success, zero is returned.  On error, -1 is returned
     ret = bind((sock), (SA *)&servaddr, sizeof(servaddr)); 
     if (ret == -1) {
         printf("Bind error...\n");
@@ -37,7 +35,6 @@ int main(int argc, char **argv) {
     }
     printf("Binding the port success...\n");
 
-    // On success, zero is returned.  On error, -1 is returned
     listenret = listen(sock, LISTENQ); 
     if (listenret == -1) {
         printf("Listening error...\n");
@@ -48,8 +45,6 @@ int main(int argc, char **argv) {
     printf("Waiting for client connection to complete...\n");
     for (;;) { 
         clilen = sizeof(cliaddr);
-        /*On success, these system calls return a file descriptor for the
-        accepted socket. On error, -1 is returned.*/
         connret = accept(sock, (SA *)&cliaddr, &clilen); 
         if (connret == -1) {
             printf("Accept error...\n");

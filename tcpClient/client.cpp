@@ -12,10 +12,7 @@
 int main(int argc, char **argv) {
     int ret, sock;
     struct sockaddr_in servaddr;
-    
-    /*Create a socket, initialize the socket address structure
-    On success, a file descriptor for the new socket is returned.  
-    On error, -1 is returned*/
+
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
         printf("Create socket error...\n");
@@ -26,13 +23,8 @@ int main(int argc, char **argv) {
     memset(&servaddr, 0,sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(SERV_PORT);
-    /*Convert the string pointed to by the argv pointer, and store 
-    the binary result through the servaddr.sin_addr pointer, 
-    return 1 if successful, and return 0 if it fails.*/
     inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr); 
     
-    /*Connect to server.If the connection or binding succeeds, 
-    zero is returned. On error, -1 is returned*/
     ret = connect(sock, (struct sockaddr *)&servaddr, sizeof(servaddr)); 
     if (ret < 0) {
         printf("Connect error...\n");
@@ -47,10 +39,8 @@ int main(int argc, char **argv) {
     printf("Please enter the path of the file to be transferred: ");
     scanf("%s", file_path);
     
-    //Get filename from filepath
     char file_name[128] = {0};
     strncpy(file_name, basename(file_path), sizeof(file_name));
-    //On success, return the new file descriptor. On error, -1 is returned
     int fd = open(file_path, O_RDWR);
     if (fd == -1) {
         printf("Open [%s] error...\n", file_path);
@@ -77,7 +67,6 @@ int main(int argc, char **argv) {
     int sent = 0; 
     while (1) {
         memset(buf, 0, sizeof(buf));
-        //On success, the number of bytes read is returned. On error, -1 is returned
         int rn = read(fd, buf, sizeof(buf));
         if (rn == 0) {
             printf("Transfer [%s] success...\n", file_name);
@@ -89,22 +78,25 @@ int main(int argc, char **argv) {
             return -1;
         }
         printf("read:%d\t",rn);
-
-        //On success, the number of bytes written is returned. On error,-1 is returned        
-        int wn = write(sock, buf, rn);
-        if ((wn > 0) && (wn < rn)) {
-            printf("The disk is full, or the file length limit for a given process has been exceeded...\n");
-            close(fd);
-            return -1;
-        }
+      
+        int wn = write(sock, buf, rn); 
         if (wn == -1) {
             printf("Using function write error...\n");
             close(fd);
             return -1;
         }
-        printf("write:%d\n",wn);
-        
-        sent += wn; 
+        if(wn == rn) {
+            printf("write:%d\n",wn);
+            sent += wn;   
+        }
+        while ((wn > 0) && (wn < rn)) {
+            int miss_write = rn - wn;
+            printf("missing write size :%d\t",miss_write);
+            rn = read(fd,buf,miss_write);
+            wn = write(sock,buf,rn);
+            sent += wn; 
+            printf("rewrite:%d\n",wn);
+        }    
         printf("Uploading ... %.2f%%\n", (float)sent / len * 100);
     }
     
