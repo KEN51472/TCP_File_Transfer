@@ -10,32 +10,28 @@
 #define SERV_PORT 9877
 
 int main(int argc, char **argv) {
-    int sockret,connret;
+    int connret, sock;
     struct sockaddr_in servaddr;
     
-    if (argc != 2) {
-        return 0;
-    }
-    
     //Create a socket, initialize the socket address structure
-    sockret = socket(AF_INET, SOCK_STREAM, 0);
-    if(sockret == -1) {
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1) {
         printf("Create socket error...\n");
         return -1;
     }
     printf("Create socket success...\n");
-   
+    
     memset(&servaddr, 0,sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(SERV_PORT);
     /*Convert the string pointed to by the argv pointer, and store 
     the binary result through the servaddr.sin_addr pointer, 
     return 1 if successful, and return 0 if it fails.*/
-    inet_pton(AF_INET, argv[1], &servaddr.sin_addr); 
+    inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr); 
     
     //Connect to server
-    connret = connect(sockret, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0; 
-    if(connret == -1) {
+    connret = connect(sock, (struct sockaddr *)&servaddr, sizeof(servaddr)); 
+    if (connret < 0) {
         printf("Connect error...\n");
         return -1;
     }
@@ -50,10 +46,10 @@ int main(int argc, char **argv) {
     //Get filename from filepath
     char file_name[128] = {0};
     strncpy(file_name, basename(file_path), sizeof(file_name));
-    //Open the file
     int fd = open(file_path, O_RDWR);
     if (fd == -1) {
         printf("Open [%s] error...\n", file_path);
+        close(fd);
         return -1;
     }
     
@@ -61,37 +57,45 @@ int main(int argc, char **argv) {
     int len = lseek(fd, 0, SEEK_END);
     //Offset the file cursor to the beginning of the file
     lseek(fd, 0, SEEK_SET);
-    if(sizeof(len)>sizeof(file_info)) {
+    if (sizeof(len) > sizeof(file_info)) {
         printf("File is too large to transfer...\n");
+        close(fd);
         return -1;
     }
     //Store file size and file name in file_info
     sprintf(file_info, "%d", len);
     strcpy(file_info + 16, file_name);
     // Tell server the name of the file to be uploaded
-    int writen = write(sockret, file_info, 1024);
-    if(writen == -1) {
-        printf("using function write error...\n");
-        return -1;
-    }
+    int writen = write(sock, file_info, 1024);
     
     int sent = 0; 
     while (1) {
-        memset(buf, 0,sizeof(buf));
-        //Read data
-        int ret = read(fd, buf, sizeof(buf));
-        if (ret <= 0) {
+        memset(buf, 0, sizeof(buf));
+        int readn = read(fd, buf, sizeof(buf));
+        if (readn == 0) {
             printf("Transfer [%s] success...\n", file_name);
             break;
+        }else if (readn < 0) {
+            printf("Function read error...\n");
+            close(fd);
+            return -1;
+        }else{
+            printf("read:%d\n",readn);
         }
         
-        //Send data
-        int writen = write(sockret, buf, ret);
-        if(writen == -1) {
-        printf("Using function write error...\n");
-        return -1;
-        }   
-        sent += ret; 
+        int writen = write(sock, buf, readn);
+        if (writen > 0 && sizeof(writen) < sizeof(readn)) {
+            printf("The disk is full, or the file length limit for a given process has been exceeded...\n");
+            close(fd);
+            return -1;
+        }else if (writen == -1) {
+            printf("Using function write error...\n");
+            close(fd);
+            return -1;
+        }else {
+            printf("write:%d\n",writen);
+        } 
+        sent += writen; 
         printf("Uploading ... %.2f%%\n", (float)sent / len * 100);
     }
     

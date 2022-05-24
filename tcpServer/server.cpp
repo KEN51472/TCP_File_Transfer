@@ -8,17 +8,17 @@
 
 #define SERV_PORT 9877
 #define LISTENQ 1024
-#define	SA	struct sockaddr
+#define	SA struct sockaddr
 
 int main(int argc, char **argv) {
-    int listenret, connret,sockret,bindret;
+    int sock, listenret, connret, bindret;
     pid_t childpid;
     socklen_t clilen;
     struct sockaddr_in cliaddr, servaddr;
     
     //Create a socket and bind the port of the server
-    sockret = socket(AF_INET, SOCK_STREAM, 0); 
-    if(sockret == -1) {
+    sock = socket(AF_INET, SOCK_STREAM, 0); 
+    if (sock == -1) {
         printf("Create socket error...\n");
         return -1;
     }
@@ -29,15 +29,15 @@ int main(int argc, char **argv) {
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(SERV_PORT);
     
-    bindret = bind((listenret), (SA *)&servaddr, sizeof(servaddr)); 
-    if(bindret == -1) {
+    bindret = bind((sock), (SA *)&servaddr, sizeof(servaddr)); 
+    if (bindret < 0) {
         printf("Bind error...\n");
         return -1;
     }
     printf("Binding the port success...\n");
 
-    listenret = listen(listenret, LISTENQ); 
-    if(listenret == -1) {
+    listenret = listen(sock, LISTENQ); 
+    if (listenret < 0) {
         printf("Listening error...\n");
         return -1;
     }
@@ -49,8 +49,8 @@ int main(int argc, char **argv) {
         clilen = sizeof(cliaddr);
         
         //accept success 
-        connret = accept(listenret, (SA *)&cliaddr, &clilen); 
-        if(connret == -1) {
+        connret = accept(sock, (SA *)&cliaddr, &clilen); 
+        if (connret < 0) {
             printf("Accept error...\n");
             return -1;
         }
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
             //Read file size and file name
             //Read everything in accept into the memory pointed to by the buf pointer
             int readn = read(connret, buf, sizeof(buf));  
-            if(readn == -1) {
+            if (readn == -1) {
                 printf("Using function read error...\n");
                 return -1;
             }            
@@ -89,27 +89,32 @@ int main(int argc, char **argv) {
             int size = atoi(file_len); 
             
             //Record the number of bytes written
-            int wrote = 0;         
+            int received = 0;         
             //accept
             while (1) {
                 memset(buf,0,1024); 
                 int readn = read(connret, buf, sizeof(buf));
-                if (readn = 0) {
-                    printf("\n [recv-%s] trans finished...\n", file_name);
+                if (readn == 0) {
+                    printf("Transfer [%s] success...\n", file_name);
                     break;
                 }else if (readn < 0) {
-                    printf("trans error...\n");
-                    break;
+                    printf("Function read error...\n");
+                    return -1;
                 }
 
                 int writen = write(fd, buf, readn);
-                if(writen == -1) {
+                if ((writen > 0)&& (sizeof(writen) < sizeof(readn))) {
+                    printf("The disk is full, "
+                    "or the file length limit for a given process has been exceeded.\n");
+                    return -1;
+                }else if (writen == -1) {
                     printf("Using function write error...\n");
+                    close(fd);
                     return -1;
                 } 
-                wrote += readn; 
+                received += writen; 
                 //Dynamic output receive input
-                printf("Uploading %.2f%% \n", (float)wrote / size * 100);
+                printf("Uploading %.2f%% \n", (float)received / size * 100);
             }
             return 0;
         }
