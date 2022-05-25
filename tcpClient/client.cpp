@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     }
     printf("Create socket success...\n");
     
-    memset(&servaddr, 0,sizeof(servaddr));
+    memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(SERV_PORT);
     inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr); 
@@ -46,13 +46,13 @@ int main(int argc, char **argv) {
         printf("Open [%s] error...\n", file_path);
         return -1;
     }
-    printf("Open [%s] success...\n",file_path);
+    printf("Open [%s] success...\n", file_path);
     
     //Calculate file size
     int len = lseek(fd, 0, SEEK_END);
     //Offset the file cursor to the beginning of the file
     lseek(fd, 0, SEEK_SET);
-    printf("file_size : %d\n",len);
+    printf("file_size : %d\n", len);
     //Store file size and file name in file_info
     sprintf(file_info, "%d", len);
     strcpy(file_info + 16, file_name);
@@ -61,6 +61,7 @@ int main(int argc, char **argv) {
     if (wn == -1) {
         printf("Using function write error...\n");
         close(fd);
+        close(sock);
         return -1;
     }
     
@@ -78,35 +79,32 @@ int main(int argc, char **argv) {
             return -1;
         }
         printf("read:%d\t",rn);
-      
-        int wn = write(sock, buf, rn); 
-        if (wn == -1) {
-            printf("Using function write error...\n");
-            close(fd);
-            return -1;
-        }
-        while (wn > 0) {
-            int left = rn - wn;
-            if (left == 0) {
-                printf("write:%d\n",wn);
-                sent += wn;
-                break;
-            }
-            printf("missing write size :%d\t",left);
-            rn = read(fd,buf,left);
-            if (rn < 0) {
-                printf("Function read error...\n");
-                close(fd);
-                return -1;
-            }
-            wn = write(sock,buf,rn);
+           
+        while (1) {
+            int wn = write(sock, buf, rn);
             if (wn == -1) {
                 printf("Using function write error...\n");
                 close(fd);
+                close(sock);
+                return -1;
+            } 
+            int left = rn;
+            left -= wn;
+            if (left == 0) {
+                printf("write:%d\n", wn);
+                sent += wn;
+                break;
+            }
+            printf("missing write size :%d\t", left);
+            wn = write(sock, buf, left);
+            if (wn == -1) {
+                printf("Using function write error...\n");
+                close(fd);
+                close(sock);
                 return -1;
             }
             sent += wn; 
-            printf("rewrite:%d\n",wn);
+            printf("rewrite:%d\n", wn);
         }    
         printf("Uploading ... %.2f%%\n", (float)sent / len * 100);
     }

@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     }
     printf("Create socket success...\n");
    
-    memset(&servaddr, 0,sizeof(servaddr)); 
+    memset(&servaddr, 0, sizeof(servaddr)); 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(SERV_PORT);
@@ -108,29 +108,32 @@ int main(int argc, char **argv) {
                     close(connret);
                     return -1;
                 }
-                while (wn > 0) {
-                    int left = rn - wn;
-                    if (left == 0) {
-                        printf("write:%d\n",wn);
-                        received += wn;
-                        break;
-                    }
-                    printf("missing write size :%d\t",left);
-                    rn = read(fd,buf,left);
-                    if (rn < 0) {
-                        printf("Function read error...\n");
-                        close(fd);
-                        return -1;
-                    }
-                    wn = write(sock,buf,rn);
+                while (1) {
+                    int wn = write(sock, buf, rn);
                     if (wn == -1) {
                         printf("Using function write error...\n");
                         close(fd);
+                        close(sock);
+                        return -1;
+                    } 
+                    int left = rn;
+                    left -= wn;
+                    if (left == 0) {
+                        printf("write:%d\n", wn);
+                        received += wn;
+                        break;
+                    }
+                    printf("missing write size :%d\t", left);
+                    wn = write(sock, buf, left);
+                    if (wn == -1) {
+                        printf("Using function write error...\n");
+                        close(fd);
+                        close(sock);
                         return -1;
                     }
                     received += wn; 
-                    printf("rewrite:%d\n",wn);
-                }    
+                    printf("rewrite:%d\n", wn);
+        }    
                 printf("Uploading %.2f%% \n", (float)received / size * 100);
             }
             close(fd);
