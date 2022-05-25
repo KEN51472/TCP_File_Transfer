@@ -102,19 +102,24 @@ int main(int argc, char **argv) {
                 }
 
                 int wn = write(fd, buf, rn);
-                if ((wn > 0)&& (wn < rn)) {
-                    printf("The disk is full, or the file length limit for a given process has been exceeded.\n");
-                    close(fd);
-                    close(connret);
-                    return -1;
-                }
                 if (wn == -1) {
                     printf("Using function write error...\n");
                     close(fd);
                     close(connret);
                     return -1;
-                } 
-                received += wn; 
+                }
+                if(wn == rn) {
+                    printf("write:%d\n",wn);
+                    received += wn;   
+                }
+                while ((wn > 0) && (wn < rn)) {
+                    int miss_write = rn - wn;
+                    printf("missing write size :%d\t",miss_write);
+                    rn = read(fd,buf,miss_write);
+                    wn = write(sock,buf,rn);
+                    received += wn; 
+                    printf("rewrite:%d\n",wn);
+                }    
                 printf("Uploading %.2f%% \n", (float)received / size * 100);
             }
             close(fd);
