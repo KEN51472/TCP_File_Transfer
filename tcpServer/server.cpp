@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
                 }
                 while (wn > 0) {
                     int left = rn - wn;
-                    if (left ==0) {
+                    if (left == 0) {
                         printf("write:%d\n",wn);
                         received += wn;
                         break;
