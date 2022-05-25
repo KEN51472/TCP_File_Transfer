@@ -108,15 +108,26 @@ int main(int argc, char **argv) {
                     close(connret);
                     return -1;
                 }
-                if(wn == rn) {
-                    printf("write:%d\n",wn);
-                    received += wn;   
-                }
-                while ((wn > 0) && (wn < rn)) {
-                    int miss_write = rn - wn;
-                    printf("missing write size :%d\t",miss_write);
-                    rn = read(fd,buf,miss_write);
+                while (wn > 0) {
+                    int left = rn - wn;
+                    if (left ==0) {
+                        printf("write:%d\n",wn);
+                        received += wn;
+                        break;
+                    }
+                    printf("missing write size :%d\t",left);
+                    rn = read(fd,buf,left);
+                    if (rn < 0) {
+                        printf("Function read error...\n");
+                        close(fd);
+                        return -1;
+                    }
                     wn = write(sock,buf,rn);
+                    if (wn == -1) {
+                        printf("Using function write error...\n");
+                        close(fd);
+                        return -1;
+                    }
                     received += wn; 
                     printf("rewrite:%d\n",wn);
                 }    

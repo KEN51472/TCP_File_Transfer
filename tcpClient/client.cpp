@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 
     char file_path[128] = {0};  
     char file_info[2048] = {0}; 
-    char buf[1024] = {0};
+    char buf[8192] = {0};
     
     printf("Please enter the path of the file to be transferred: ");
     scanf("%s", file_path);
@@ -85,15 +85,26 @@ int main(int argc, char **argv) {
             close(fd);
             return -1;
         }
-        if(wn == rn) {
-            printf("write:%d\n",wn);
-            sent += wn;   
-        }
-        while ((wn > 0) && (wn < rn)) {
-            int miss_write = rn - wn;
-            printf("missing write size :%d\t",miss_write);
-            rn = read(fd,buf,miss_write);
+        while (wn > 0) {
+            int left = rn - wn;
+            if (left ==0) {
+                printf("write:%d\n",wn);
+                sent += wn;
+                break;
+            }
+            printf("missing write size :%d\t",left);
+            rn = read(fd,buf,left);
+            if (rn < 0) {
+                printf("Function read error...\n");
+                close(fd);
+                return -1;
+            }
             wn = write(sock,buf,rn);
+            if (wn == -1) {
+                printf("Using function write error...\n");
+                close(fd);
+                return -1;
+            }
             sent += wn; 
             printf("rewrite:%d\n",wn);
         }    
