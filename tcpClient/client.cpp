@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 
 #define SERV_PORT 9877
 
@@ -15,7 +16,7 @@ int main(int argc, char **argv) {
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
-        printf("Create socket error...\n");
+        printf("Create socket error...\nerrno is: %d\n", errno);
         return -1;
     }
     printf("Create socket success...\n");
@@ -27,14 +28,14 @@ int main(int argc, char **argv) {
     
     ret = connect(sock, (struct sockaddr *)&servaddr, sizeof(servaddr)); 
     if (ret < 0) {
-        printf("Connect error...\n");
+        printf("Connect error...\nerrno is: %d\n", errno);
         return -1;
     }
     printf("Connect to server success...\n");
 
     char file_path[128] = {0};  
     char file_info[2048] = {0}; 
-    char buf[8192] = {0};
+    char buf[4096] = {0};
     
     printf("Please enter the path of the file to be transferred: ");
     scanf("%s", file_path);
@@ -43,23 +44,21 @@ int main(int argc, char **argv) {
     strncpy(file_name, basename(file_path), sizeof(file_name));
     int fd = open(file_path, O_RDWR);
     if (fd == -1) {
-        printf("Open [%s] error...\n", file_path);
+        printf("Open [%s] error...\nerrno is: %d\n", file_path, errno);
         return -1;
     }
     printf("Open [%s] success...\n", file_path);
     
-    //Calculate file size
     int len = lseek(fd, 0, SEEK_END);
-    //Offset the file cursor to the beginning of the file
     lseek(fd, 0, SEEK_SET);
     printf("file_size : %d\n", len);
     //Store file size and file name in file_info
     sprintf(file_info, "%d", len);
     strcpy(file_info + 16, file_name);
     // Tell server the name of the file to be uploaded
-    int wn = write(sock, file_info, 1024);
-    if (wn == -1) {
-        printf("Using function write error...\n");
+    int writeinfo = write(sock, file_info, 1024);
+    if (writeinfo == -1) {
+        printf("Using function write error...\nerrno is: %d\n", errno);
         close(fd);
         close(sock);
         return -1;
@@ -74,37 +73,26 @@ int main(int argc, char **argv) {
             break;
         }    
         if (rn < 0) {
-            printf("Function read error...\n");
+            printf("Function read error...\nerrno is: %d\n", errno);
             close(fd);
             return -1;
         }
-        printf("read:%d\t",rn);
-           
-        while (1) {
-            int wn = write(sock, buf, rn);
+        
+        int left = rn;   
+        while (left > 0) {
+            int wn = write(sock, buf, left);          
             if (wn == -1) {
-                printf("Using function write error...\n");
+                printf("Using function write error...\nerrno is: %d\n", errno);
                 close(fd);
                 close(sock);
                 return -1;
             } 
-            int left = rn;
             left -= wn;
+            sent += wn;
             if (left == 0) {
-                printf("write:%d\n", wn);
-                sent += wn;
                 break;
             }
-            printf("missing write size :%d\t", left);
-            wn = write(sock, buf, left);
-            if (wn == -1) {
-                printf("Using function write error...\n");
-                close(fd);
-                close(sock);
-                return -1;
-            }
-            sent += wn; 
-            printf("rewrite:%d\n", wn);
+            printf("missing write size :%d\nrewrite:%d\n", left, wn); 
         }    
         printf("Uploading ... %.2f%%\n", (float)sent / len * 100);
     }
