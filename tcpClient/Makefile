@@ -1,3 +1,3 @@
 client:client.cpp
-	gcc client.cpp -o client
+	g++ client.cpp -o client
 	
