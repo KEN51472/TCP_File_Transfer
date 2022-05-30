@@ -23,16 +23,14 @@ public:
     };
 };
 
-class Open
+class ReadFile
 {
 public:
-    int fd;
-    char file_path[128] = {0};
-    Open() {
-        scanf("%s", file_path);
+    int fd;  
+    ReadFile(char *file_path) {
         fd = open(file_path, O_RDWR);
     } 
-    ~Open() {
+    ~ReadFile() {
         close(fd);
         printf("fd closed success...\n");
     };
@@ -60,22 +58,23 @@ int main(int argc, char **argv) {
         return -1;
     }
     printf("Connect to server success...\n");
-
     
     char file_info[2048] = {0}; 
     char buf[4096] = {0};
+    char file_path[128] = {0};
     printf("Please enter the path of the file to be transferred: ");
-    Open open;  
+    scanf("%s", file_path); 
+    ReadFile rf(file_path); 
     char file_name[128] = {0};
-    strncpy(file_name, basename(open.file_path), sizeof(file_name));
-    if (open.fd == -1) {
-        printf("Open [%s] error...\nerrno is: %d\n", open.file_path, errno);
+    strncpy(file_name, basename(file_path), sizeof(file_name));
+    if (rf.fd == -1) {
+        printf("Open [%s] error...\nerrno is: %d\n", file_path, errno);
         return -1;
     }
-    printf("Open [%s] success...\n",  open.file_path);
+    printf("Open [%s] success...\n", file_path);
     
-    int len = lseek(open.fd, 0, SEEK_END);
-    lseek(open.fd, 0, SEEK_SET);
+    int len = lseek(rf.fd, 0, SEEK_END);
+    lseek(rf.fd, 0, SEEK_SET);
     printf("file_size : %d\n", len);
     //Store file size and file name in file_info
     sprintf(file_info, "%d", len);
@@ -90,7 +89,7 @@ int main(int argc, char **argv) {
     int sent = 0; 
     while (1) {
         memset(buf, 0, sizeof(buf));
-        int rn = read(open.fd, buf, sizeof(buf));
+        int rn = read(rf.fd, buf, sizeof(buf));
         if (rn == 0) {
             printf("Transfer [%s] success...\n", file_name);
             break;
@@ -109,6 +108,7 @@ int main(int argc, char **argv) {
             } 
             left -= wn;
             sent += wn;
+            printf("sent:%d",sent);
             if (left == 0) {
                 break;
             }
