@@ -18,8 +18,10 @@ public:
         sock = socket(AF_INET, SOCK_STREAM, 0);
     } 
     ~Socket() {
-        close(sock);
-        printf("socket closed success...\n");
+        if(sock > 0) {
+            close(sock);
+            printf("socket closed success...\n");
+        }     
     };
 };
 
@@ -31,8 +33,10 @@ public:
         fd = open(file_path, O_RDWR);
     } 
     ~ReadFile() {
-        close(fd);
-        printf("fd closed success...\n");
+        if (fd > 0) {
+            close(fd);
+            printf("fd closed success...\n");
+        }
     };
 };
 
@@ -108,7 +112,7 @@ int main(int argc, char **argv) {
             } 
             left -= wn;
             sent += wn;
-            printf("sent:%d",sent);
+            printf("sent:%d\n",sent);
             if (left == 0) {
                 break;
             }
@@ -116,6 +120,5 @@ int main(int argc, char **argv) {
         }    
         printf("Uploading ... %.2f%%\n", (float)sent / len * 100);
     }
-    
     return 0;
 }

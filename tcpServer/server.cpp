@@ -19,35 +19,41 @@ public:
     sock = socket(AF_INET, SOCK_STREAM, 0);
     } 
     ~Socket() {
-        close(sock);
-        printf("socket closed success...\n");
+        if (sock > 0) {
+            close(sock);
+            printf("socket closed success...\n");
+        }     
     };
 };
 
 class Monitor
 {   
 public:
-    int listenret;
-    Monitor(int sockret) {
-        listenret = listen(sockret, LISTENQ);
+    int listen_sock;
+    Monitor(int sock) {
+        listen_sock = listen(sock, LISTENQ);
     }   
     ~Monitor() {
-        close(listenret);
-        printf("listenret closed success...\n");
+        if (listen_sock > 0){
+            close(listen_sock);
+            printf("listen_sock closed success...\n");
+        }    
     };
 };
 
 class Link
 {
 public:
-    int accret;
+    int accept_sock;
     Link() {};
-    void setLink(int sockret, sockaddr *cliaddr, socklen_t clilen){
-        accret = accept(sockret, (SA *)&cliaddr, &clilen);
-    }
+        void setLink(int sock, sockaddr *cliaddr, socklen_t clilen){
+            accept_sock = accept(sock, (SA *)&cliaddr, &clilen);
+        }
     ~Link() {
-        close(accret);
-        printf("accret closed success...\n");
+        if (accept_sock > 0) {
+            close(accept_sock);
+            printf("accept_sock closed success...\n");
+        }    
     };   
 };
 
@@ -59,8 +65,11 @@ public:
         fd = open(filepath, O_RDWR | O_CREAT | O_TRUNC, 0666);
     } 
     ~ReadFile() {
-        close(fd);
-        printf("fd closed success...\n");
+        if (fd > 0) {
+            close(fd);
+            printf("fd closed success...\n"); 
+        }
+        
     };
 };
 
@@ -71,7 +80,7 @@ int main(int argc, char **argv) {
     struct sockaddr_in cliaddr, servaddr;
     
     Socket socket;
-    int sockret = socket.sock;
+    int sock = socket.sock;
     if (socket.sock == -1) {
         printf("Create socket error...\nerrno is: %d\n", errno);
         return -1;
@@ -90,33 +99,32 @@ int main(int argc, char **argv) {
     }
     printf("Binding the port success...\n");
 
-    Monitor mon(sockret);
-    if (mon.listenret == -1) {
+    Monitor mon(sock);
+    if (mon.listen_sock == -1) {
         printf("Listening error...\nerrno is: %d\n", errno);
         return -1;
     }
     printf("Listening success...\n");
 
     printf("Waiting for client connection to complete...\n");
+    Link link;
     for (;;) {   
         clilen = sizeof(cliaddr); 
-        Link link;
-        link.setLink(sockret, (SA *)&cliaddr, clilen);
-        if (link.accret == -1) {
+        link.setLink(sock, (SA *)&cliaddr, clilen);
+        if (link.accept_sock == -1) {
             printf("Accept error...\nerrno is: %d\n", errno);
             return -1;
         }
-        printf("Connect success...\n");
-        
+        printf("Connect success...\n");    
         //concurrent server
         if ((childpid = fork()) == 0) {
-            close(mon.listenret);
+            close(mon.listen_sock);
             char file_len[16] = {0};   
             char file_name[128] = {0}; 
             char buf[4096] = {0};      
             char filepath[8192] = {0};
            
-            int readn = read(link.accret, buf, sizeof(buf));  
+            int readn = read(link.accept_sock, buf, sizeof(buf));  
             if (readn == -1) {
                 printf("Using function read error...\nerrno is: %d\n", errno);
                 return -1;
@@ -141,7 +149,7 @@ int main(int argc, char **argv) {
             int received = 0;         
             while (1) {
                 memset(buf, 0, 1024); 
-                int rn = read(link.accret, buf, sizeof(buf));
+                int rn = read(link.accept_sock, buf, sizeof(buf));
                 if (file_size == 0) {   
                     printf("Empty file transfer...\n");
                     break;
