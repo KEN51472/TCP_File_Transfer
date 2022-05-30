@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
             char file_len[16] = {0};   
             char file_name[128] = {0}; 
             char buf[4096] = {0};      
-            char filepath[9192] = {0};
+            char filepath[8192] = {0};
            
             int readn = read(link.accret, buf, sizeof(buf));  
             if (readn == -1) {
