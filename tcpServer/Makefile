@@ -1,3 +1,3 @@
 server:server.cpp
-	g++ server.cpp -o server
+	g++ server.cpp -o server -lpthread
 	

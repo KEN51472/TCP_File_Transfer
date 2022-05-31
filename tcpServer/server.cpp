@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -6,6 +7,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <thread>
+using namespace std;
 
 #define SERV_PORT 9877
 #define LISTENQ 1024
@@ -73,6 +76,67 @@ public:
     };
 };
 
+int childthread(int &listen_sock,int &accept_sock) {
+    close(listen_sock);
+    char file_len[16] = {0};   
+    char file_name[128] = {0}; 
+    char buf[4096] = {0};      
+    char filepath[8192] = {0};
+           
+    int readn = read(accept_sock, buf, sizeof(buf));  
+    if (readn == -1) {
+        printf("Using function read error...\nerrno is: %d\n", errno);
+        return -1;
+    }                            
+    strncpy(file_len, buf, sizeof(file_len));                      
+    strncpy(file_name, buf + sizeof(file_len), sizeof(file_name)); 
+    printf("Ready to receive...... file name:[%s] file size:[%s] \n", file_name, file_len);
+            
+    sprintf(buf, "recv-%s", file_name);                  
+    sprintf(filepath, "/home/code/tcp_download/%s", buf); 
+    ReadFile rf(filepath);
+    if (rf.fd == -1) {
+        printf("Open error...\nerrno is: %d\n", errno);
+        return -1;
+    }
+    int file_size = atoi(file_len);            
+            
+    int received = 0;         
+    while (1) {
+        memset(buf, 0, 1024); 
+        int rn = read(accept_sock, buf, sizeof(buf));
+        if (file_size == 0) {   
+            printf("Empty file transfer...\n");
+            break;
+        }         
+        if (rn == 0) {
+            printf("Transfer [%s] success...\n", file_name);
+            break;
+                }
+        if (rn < 0) {
+            printf("Function read error...\nerrno is: %d\n", errno);
+            return -1;
+        }
+        int left = rn;  
+        while (left > 0) {
+            int wn = write(rf.fd, buf, left);
+            if (wn == -1) {
+                printf("Using function write error...\nerrno is: %d\n", errno);
+                return -1;
+            } 
+            left -= wn;
+            received += wn;
+            printf("received:%d\n", received);
+            if (left == 0) {
+                break;
+            }
+            printf("missing write size :%d\nrewrite:%d\n", left, wn); 
+        }    
+        printf("Uploading ... %.2f%%\n", (float)received /file_size * 100);
+    }
+    return 0;
+}
+
 int main(int argc, char **argv) {
     int ret;
     pid_t childpid;
@@ -100,7 +164,8 @@ int main(int argc, char **argv) {
     printf("Binding the port success...\n");
 
     Monitor mon(sock);
-    if (mon.listen_sock == -1) {
+    int *listen_sock = &mon.listen_sock;
+    if (*listen_sock == -1) {
         printf("Listening error...\nerrno is: %d\n", errno);
         return -1;
     }
@@ -108,78 +173,17 @@ int main(int argc, char **argv) {
 
     printf("Waiting for client connection to complete...\n");
     Link link;
+    int *accept_sock = &link.accept_sock;
     for (;;) {   
         clilen = sizeof(cliaddr); 
         link.setLink(sock, (SA *)&cliaddr, clilen);
-        if (link.accept_sock == -1) {
+        if (*accept_sock == -1) {
             printf("Accept error...\nerrno is: %d\n", errno);
             return -1;
         }
         printf("Connect success...\n");    
         //concurrent server
-        if ((childpid = fork()) == 0) {
-            close(mon.listen_sock);
-            char file_len[16] = {0};   
-            char file_name[128] = {0}; 
-            char buf[4096] = {0};      
-            char filepath[8192] = {0};
-           
-            int readn = read(link.accept_sock, buf, sizeof(buf));  
-            if (readn == -1) {
-                printf("Using function read error...\nerrno is: %d\n", errno);
-                return -1;
-            }            
-            //Get the file size (copy the first n characters of the string)                
-            strncpy(file_len, buf, sizeof(file_len));                      
-            //Get the file name
-            strncpy(file_name, buf + sizeof(file_len), sizeof(file_name)); 
-            printf("Ready to receive...... file name:[%s] file size:[%s] \n", file_name, file_len);
-            
-            sprintf(buf, "recv-%s", file_name);                  
-            sprintf(filepath, "/home/code/tcp_download/%s", buf); 
-            //mkdir file
-            ReadFile rf(filepath);
-            if (rf.fd == -1) {
-                printf("Open error...\nerrno is: %d\n", errno);
-                return -1;
-            }
-            //file size
-            int file_size = atoi(file_len);            
-            
-            int received = 0;         
-            while (1) {
-                memset(buf, 0, 1024); 
-                int rn = read(link.accept_sock, buf, sizeof(buf));
-                if (file_size == 0) {   
-                    printf("Empty file transfer...\n");
-                    break;
-                }         
-                if (rn == 0) {
-                    printf("Transfer [%s] success...\n", file_name);
-                    break;
-                }
-                if (rn < 0) {
-                    printf("Function read error...\nerrno is: %d\n", errno);
-                    return -1;
-                }
-                int left = rn;  
-                while (left > 0) {
-                    int wn = write(rf.fd, buf, left);
-                    if (wn == -1) {
-                        printf("Using function write error...\nerrno is: %d\n", errno);
-                        return -1;
-                    } 
-                    left -= wn;
-                    received += wn;
-                    printf("received:%d\n", received);
-                    if (left == 0) {
-                        break;
-                    }
-                    printf("missing write size :%d\nrewrite:%d\n", left, wn); 
-                }    
-                printf("Uploading ... %.2f%%\n", (float)received /file_size * 100);
-            }
-            return 0;
-        }
+        thread t(childthread,ref(*listen_sock),ref(*accept_sock));
+        t.detach();
     }
 }
