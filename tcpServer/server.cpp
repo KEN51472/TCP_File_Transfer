@@ -71,13 +71,11 @@ public:
         if (fd > 0) {
             close(fd);
             printf("fd closed success...\n"); 
-        }
-        
+        }        
     };
 };
 
-int childthread(int &listen_sock,int &accept_sock) {
-    close(listen_sock);
+int childthread(int accept_sock) {
     char file_len[16] = {0};   
     char file_name[128] = {0}; 
     char buf[4096] = {0};      
@@ -90,8 +88,13 @@ int childthread(int &listen_sock,int &accept_sock) {
     }                            
     strncpy(file_len, buf, sizeof(file_len));                      
     strncpy(file_name, buf + sizeof(file_len), sizeof(file_name)); 
+    int file_size = atoi(file_len);   
     printf("Ready to receive...... file name:[%s] file size:[%s] \n", file_name, file_len);
-            
+    if (file_size == 0) {   
+        printf("Empty file transfer...\n");
+        close(accept_sock);
+    } 
+    
     sprintf(buf, "recv-%s", file_name);                  
     sprintf(filepath, "/home/code/tcp_download/%s", buf); 
     ReadFile rf(filepath);
@@ -99,20 +102,15 @@ int childthread(int &listen_sock,int &accept_sock) {
         printf("Open error...\nerrno is: %d\n", errno);
         return -1;
     }
-    int file_size = atoi(file_len);            
-            
-    int received = 0;         
-    while (1) {
+                       
+    int received = 0;            
+    while (file_size != 0) {
         memset(buf, 0, 1024); 
         int rn = read(accept_sock, buf, sizeof(buf));
-        if (file_size == 0) {   
-            printf("Empty file transfer...\n");
-            break;
-        }         
         if (rn == 0) {
             printf("Transfer [%s] success...\n", file_name);
             break;
-                }
+        }
         if (rn < 0) {
             printf("Function read error...\nerrno is: %d\n", errno);
             return -1;
@@ -164,8 +162,7 @@ int main(int argc, char **argv) {
     printf("Binding the port success...\n");
 
     Monitor mon(sock);
-    int *listen_sock = &mon.listen_sock;
-    if (*listen_sock == -1) {
+    if (mon.listen_sock == -1) {
         printf("Listening error...\nerrno is: %d\n", errno);
         return -1;
     }
@@ -183,7 +180,7 @@ int main(int argc, char **argv) {
         }
         printf("Connect success...\n");    
         //concurrent server
-        thread t(childthread,ref(*listen_sock),ref(*accept_sock));
+        thread t(childthread,ref(*accept_sock));
         t.detach();
     }
 }
