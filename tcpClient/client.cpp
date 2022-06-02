@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
     printf("Connect to server success...\n");
     
     char file_info[2048] = {0}; 
-    char buf[4096] = {0};
+    char buf[65536] = {0};
     char file_path[128] = {0};
     printf("Please enter the path of the file to be transferred: ");
     scanf("%s", file_path); 

@@ -77,12 +77,13 @@ public:
 
 int childthread(int accept_sock) {
     char file_len[16] = {0};   
-    char file_name[128] = {0}; 
-    char buf[4096] = {0};      
-    char filepath[8192] = {0};
+    char file_name[128] = {0};
+    char new_name[256] = {0}; 
+    char buf[65536] = {0};      
+    char filepath[512] = {0};
            
-    int readn = read(accept_sock, buf, sizeof(buf));  
-    if (readn == -1) {
+    int readname = read(accept_sock, buf, sizeof(buf));  
+    if (readname == -1) {
         printf("Using function read error...\nerrno is: %d\n", errno);
         return -1;
     }                            
@@ -95,8 +96,8 @@ int childthread(int accept_sock) {
         close(accept_sock);
     } 
     
-    sprintf(buf, "recv-%s", file_name);                  
-    sprintf(filepath, "/home/code/tcp_download/%s", buf); 
+    sprintf(new_name, "recv-%s", file_name);                  
+    sprintf(filepath, "/home/code/tcp_download/%s", new_name); 
     ReadFile rf(filepath);
     if (rf.fd == -1) {
         printf("Open error...\nerrno is: %d\n", errno);
@@ -105,7 +106,7 @@ int childthread(int accept_sock) {
                        
     int received = 0;            
     while (file_size != 0) {
-        memset(buf, 0, 1024); 
+        memset(buf, 0, 65536); 
         int rn = read(accept_sock, buf, sizeof(buf));
         if (rn == 0) {
             printf("Transfer [%s] success...\n", file_name);
@@ -150,7 +151,6 @@ int main(int argc, char **argv) {
     printf("Create socket success...\n");
    
     memset(&servaddr, 0, sizeof(servaddr)); 
-    servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(SERV_PORT);
     
