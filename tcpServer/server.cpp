@@ -52,12 +52,7 @@ public:
         void setLink(int sock, sockaddr *cliaddr, socklen_t clilen){
             accept_sock = accept(sock, (SA *)&cliaddr, &clilen);
         }
-    ~Link() {
-        if (accept_sock > 0) {
-            close(accept_sock);
-            printf("accept_sock closed success...\n");
-        }    
-    };   
+    ~Link() {};   
 };
 
 class ReadFile
@@ -78,11 +73,10 @@ public:
 int childthread(int accept_sock) {
     char file_len[16] = {0};   
     char file_name[128] = {0};
-    char new_name[256] = {0}; 
     char buf[65536] = {0};      
-    char filepath[512] = {0};
+    char filepath[65560] = {0};
            
-    int readname = read(accept_sock, buf, sizeof(buf));  
+    int readname = read(accept_sock, buf, 1024);  
     if (readname == -1) {
         printf("Using function read error...\nerrno is: %d\n", errno);
         return -1;
@@ -96,8 +90,8 @@ int childthread(int accept_sock) {
         close(accept_sock);
     } 
     
-    sprintf(new_name, "recv-%s", file_name);                  
-    sprintf(filepath, "/home/code/tcp_download/%s", new_name); 
+    sprintf(buf, "recv-%s", file_name);                  
+    sprintf(filepath, "/home/code/tcp_download/%s", buf); 
     ReadFile rf(filepath);
     if (rf.fd == -1) {
         printf("Open error...\nerrno is: %d\n", errno);
@@ -106,7 +100,7 @@ int childthread(int accept_sock) {
                        
     int received = 0;            
     while (file_size != 0) {
-        memset(buf, 0, 65536); 
+        memset(buf, 0, sizeof(buf)); 
         int rn = read(accept_sock, buf, sizeof(buf));
         if (rn == 0) {
             printf("Transfer [%s] success...\n", file_name);
@@ -132,6 +126,11 @@ int childthread(int accept_sock) {
             printf("missing write size :%d\nrewrite:%d\n", left, wn); 
         }    
         printf("Uploading ... %.2f%%\n", (float)received /file_size * 100);
+    }
+
+    if (accept_sock > 0) {
+        close(accept_sock);
+        printf("accept_sock %d closed success...\n",accept_sock);
     }
     return 0;
 }
@@ -168,19 +167,19 @@ int main(int argc, char **argv) {
     }
     printf("Listening success...\n");
 
-    printf("Waiting for client connection to complete...\n");
-    Link link;
-    int *accept_sock = &link.accept_sock;
-    for (;;) {   
+    printf("Waiting for client connection to complete...\n"); 
+    while(1) { 
+        Link link;
+        int *accept_sock = &link.accept_sock;  
         clilen = sizeof(cliaddr); 
         link.setLink(sock, (SA *)&cliaddr, clilen);
         if (*accept_sock == -1) {
             printf("Accept error...\nerrno is: %d\n", errno);
             return -1;
         }
-        printf("Connect success...\n");    
+        printf("Connect %d success...\n",link.accept_sock);    
         //concurrent server
         thread t(childthread,ref(*accept_sock));
-        t.detach();
+        t.detach();                 
     }
 }
