@@ -44,6 +44,7 @@ int childthread(int accept_sock) {
         cout << "Open error...\t" << "errno : " << errno << endl;
         return -1;
     }
+    cout << "Open success...\t" << "descriptor : " << fd_wrapper.get() << endl;
                        
     int received = 0;            
     while (file_size != 0) {
@@ -79,7 +80,6 @@ int childthread(int accept_sock) {
 
 int main(int argc, char **argv) {
     int ret, sock, listen_sock, accept_sock;
-    pid_t childpid;
     socklen_t clilen;
     struct sockaddr_in cliaddr, servaddr;
     
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
         cout << "Create socket error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Create socket success..." << endl;
+    cout << "Create socket success...\t" << "descriptor : " << socket_wrapper.get() << endl;
     
     memset(&servaddr, 0, sizeof(servaddr)); 
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);

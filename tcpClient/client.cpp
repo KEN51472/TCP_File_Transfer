@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
         cout << "Create socket error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Create socket success..." << endl;
+    cout << "Create socket success...\t" << "descriptor : " << socket_wrapper.get() << endl;
     
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
@@ -39,9 +39,14 @@ int main(int argc, char **argv) {
     char buf[65536] = {0};
     char file_path[128] = {0};
     cout << "Please enter the path of the file to be transferred: ";
-    scanf("%s", file_path); 
+    scanf("%s", file_path);  
     fd = open(file_path, O_RDWR);
     DesWrapper fd_wrapper(fd);
+    if (fd_wrapper.get() == -1) {
+        cout << "Open error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+    cout << "Open success...\t" << "descriptor : " << fd_wrapper.get() << endl;
     char file_name[128] = {0};
     strncpy(file_name, basename(file_path), sizeof(file_name));
     if (fd_wrapper.get() == -1) {
