@@ -8,178 +8,119 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <thread>
+#include <wrapper.h>
 using namespace std;
 
 #define SERV_PORT 9877
 #define LISTENQ 1024
 #define	SA struct sockaddr
 
-class Socket
-{
-public:
-    int sock;
-    Socket() {
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-    } 
-    ~Socket() {
-        if (sock > 0) {
-            close(sock);
-            printf("socket closed success...\n");
-        }     
-    };
-};
-
-class Monitor
-{   
-public:
-    int listen_sock;
-    Monitor(int sock) {
-        listen_sock = listen(sock, LISTENQ);
-    }   
-    ~Monitor() {
-        if (listen_sock > 0){
-            close(listen_sock);
-            printf("listen_sock closed success...\n");
-        }    
-    };
-};
-
-class Link
-{
-public:
-    int accept_sock;
-    Link() {};
-        void setLink(int sock, sockaddr *cliaddr, socklen_t clilen){
-            accept_sock = accept(sock, (SA *)&cliaddr, &clilen);
-        }
-    ~Link() {};   
-};
-
-class ReadFile
-{
-public:
-    int fd;  
-    ReadFile(char *filepath) {
-        fd = open(filepath, O_RDWR | O_CREAT | O_TRUNC, 0666);
-    } 
-    ~ReadFile() {
-        if (fd > 0) {
-            close(fd);
-            printf("fd closed success...\n"); 
-        }        
-    };
-};
-
 int childthread(int accept_sock) {
     char file_len[16] = {0};   
     char file_name[128] = {0};
     char buf[65536] = {0};      
     char filepath[65560] = {0};
-           
-    int readname = read(accept_sock, buf, 1024);  
+
+    DesWrapper accept_wrapper(accept_sock);
+    int readname = read(accept_wrapper.get(), buf, 1024);  
     if (readname == -1) {
-        printf("Using function read error...\nerrno is: %d\n", errno);
+        cout << "Using function read error...\t" << "errno : " << errno << endl;
         return -1;
     }                            
     strncpy(file_len, buf, sizeof(file_len));                      
     strncpy(file_name, buf + sizeof(file_len), sizeof(file_name)); 
     int file_size = atoi(file_len);   
-    printf("Ready to receive...... file name:[%s] file size:[%s] \n", file_name, file_len);
+    cout << "Ready to receive...... file name:[" << file_name << "] file size:[" << file_len << "]" << endl;
     if (file_size == 0) {   
-        printf("Empty file transfer...\n");
-        close(accept_sock);
+        cout << "Empty file transfer..." << endl;
     } 
     
     sprintf(buf, "recv-%s", file_name);                  
     sprintf(filepath, "/home/code/tcp_download/%s", buf); 
-    ReadFile rf(filepath);
-    if (rf.fd == -1) {
-        printf("Open error...\nerrno is: %d\n", errno);
+    
+    int fd = open(filepath, O_RDWR | O_CREAT | O_TRUNC, 0666);
+    DesWrapper fd_wrapper(fd);
+    if (fd_wrapper.get() == -1) {
+        cout << "Open error...\t" << "errno : " << errno << endl;
         return -1;
     }
                        
     int received = 0;            
     while (file_size != 0) {
         memset(buf, 0, sizeof(buf)); 
-        int rn = read(accept_sock, buf, sizeof(buf));
+        int rn = read(accept_wrapper.get(), buf, sizeof(buf));
         if (rn == 0) {
-            printf("Transfer [%s] success...\n", file_name);
+            cout << "Transfer [" << file_name << "] success..." << endl;
             break;
         }
         if (rn < 0) {
-            printf("Function read error...\nerrno is: %d\n", errno);
+            cout << "Function read error...\t" << "errno : " << errno << endl;
             return -1;
         }
         int left = rn;  
         while (left > 0) {
-            int wn = write(rf.fd, buf, left);
+            int wn = write(fd_wrapper.get(), buf, left);
             if (wn == -1) {
-                printf("Using function write error...\nerrno is: %d\n", errno);
+                cout << "Using function write error...\t" << "errno : " << errno << endl;
                 return -1;
             } 
             left -= wn;
             received += wn;
-            printf("received:%d\n", received);
+            cout << "received:" << received << endl;
             if (left == 0) {
                 break;
             }
-            printf("missing write size :%d\nrewrite:%d\n", left, wn); 
+            cout << "missing write size :" << left <<"\trewrite:" << wn << endl; 
         }    
-        printf("Uploading ... %.2f%%\n", (float)received /file_size * 100);
-    }
-
-    if (accept_sock > 0) {
-        close(accept_sock);
-        printf("accept_sock %d closed success...\n",accept_sock);
+        cout << "Uploading ..." << (float)received /file_size * 100 << "%" << endl;
     }
     return 0;
 }
 
 int main(int argc, char **argv) {
-    int ret;
+    int ret, sock, listen_sock, accept_sock;
     pid_t childpid;
     socklen_t clilen;
     struct sockaddr_in cliaddr, servaddr;
     
-    Socket socket;
-    int sock = socket.sock;
-    if (socket.sock == -1) {
-        printf("Create socket error...\nerrno is: %d\n", errno);
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    DesWrapper socket_wrapper(sock);
+    if (socket_wrapper.get() == -1) {
+        cout << "Create socket error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    printf("Create socket success...\n");
-   
+    cout << "Create socket success..." << endl;
+    
     memset(&servaddr, 0, sizeof(servaddr)); 
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(SERV_PORT);
     
-    ret = bind((socket.sock), (SA *)&servaddr, sizeof(servaddr)); 
+    ret = bind(sock, (SA *)&servaddr, sizeof(servaddr)); 
     if (ret == -1) {
-        printf("Bind error...\nerrno is: %d\n", errno);
+        cout << "Bind error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    printf("Binding the port success...\n");
+    cout << "Binding the port success..." << endl;
 
-    Monitor mon(sock);
-    if (mon.listen_sock == -1) {
-        printf("Listening error...\nerrno is: %d\n", errno);
+    listen_sock = listen(sock, LISTENQ);
+    DesWrapper listen_wrapper(listen_sock);
+    if (listen_wrapper.get() == -1) {
+        cout << "Listening error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    printf("Listening success...\n");
+    cout << "Listening success..." << endl;
 
-    printf("Waiting for client connection to complete...\n"); 
+    cout << "Waiting for client connection to complete..." << endl;
     while(1) { 
-        Link link;
-        int *accept_sock = &link.accept_sock;  
         clilen = sizeof(cliaddr); 
-        link.setLink(sock, (SA *)&cliaddr, clilen);
-        if (*accept_sock == -1) {
-            printf("Accept error...\nerrno is: %d\n", errno);
+        accept_sock = accept(sock, (SA *)&cliaddr, &clilen);      
+        if (accept_sock == -1) {
+            cout << "Accept error...\t" << "errno : " << errno << endl;
             return -1;
         }
-        printf("Connect %d success...\n",link.accept_sock);    
+        cout << "Connect accept_sock " << accept_sock << " success..." << endl;    
         //concurrent server
-        thread t(childthread,ref(*accept_sock));
+        thread t(childthread, accept_sock);
         t.detach();                 
     }
 }
