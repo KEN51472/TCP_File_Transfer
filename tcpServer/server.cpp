@@ -72,7 +72,7 @@ int childthread(int accept_sock) {
             }
             cout << "missing write size :" << left <<"\trewrite:" << wn << endl; 
         }    
-        cout << "Uploading ..." << (float)received /file_size * 100 << "%" << endl;
+        cout << "Uploading ... " << (float)received /file_size * 100 << "%" << endl;
     }
     return 0;
 }

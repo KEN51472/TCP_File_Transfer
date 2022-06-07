@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
             }
             cout << "missing write size :" << left <<"\trewrite:" << wn << endl;  
         }    
-        cout << "Uploading ..." << (float)sent /len * 100 << "%" << endl;
+        cout << "Uploading ... " << (float)sent /len * 100 << "%" << endl;
     }
     return 0;
 }
