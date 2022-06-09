@@ -41,12 +41,12 @@ int childthread(int accept_sock) {
     sprintf(filepath, "/home/code/tcp_download/%s", buf);
 
     int fd = open(filepath, O_RDWR | O_CREAT | O_TRUNC, 0666);
-    DesWrapper fd_wrapper(fd);
-    if (fd_wrapper.get() == -1) {
+    if (fd == -1) {
         cout << "Open error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
+    DesWrapper fd_wrapper(fd);
     cout << "Open success...\t"
          << "descriptor : " << fd_wrapper.get() << endl;
 
@@ -63,6 +63,7 @@ int childthread(int accept_sock) {
                  << "errno : " << errno << endl;
             return -1;
         }
+        
         int left = rn;
         while (left > 0) {
             int wn = write(fd_wrapper.get(), buf, left);
@@ -83,7 +84,7 @@ int childthread(int accept_sock) {
         cout << "Uploading ... " << (float)received / file_size * 100 << "%"
              << endl;
     }
-    
+
     return 0;
 }
 
@@ -93,12 +94,12 @@ int main(int argc, char** argv) {
     struct sockaddr_in cliaddr, servaddr;
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
-    DesWrapper socket_wrapper(sock);
-    if (socket_wrapper.get() == -1) {
+    if (sock == -1) {
         cout << "Create socket error...\t"
              << "errno : " << errno << endl;
         return -1;
-    }
+    } 
+    DesWrapper socket_wrapper(sock);
     cout << "Create socket success...\t"
          << "descriptor : " << socket_wrapper.get() << endl;
 
@@ -115,12 +116,12 @@ int main(int argc, char** argv) {
     cout << "Binding the port success..." << endl;
 
     listen_sock = listen(sock, LISTENQ);
-    DesWrapper listen_wrapper(listen_sock);
-    if (listen_wrapper.get() == -1) {
+    if (listen_sock == -1) {
         cout << "Listening error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
+    DesWrapper listen_wrapper(listen_sock);
     cout << "Listening success..." << endl;
 
     cout << "Waiting for client connection to complete..." << endl;

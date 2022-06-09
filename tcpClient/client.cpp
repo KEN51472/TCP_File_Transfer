@@ -16,12 +16,12 @@ int main(int argc, char** argv) {
     struct sockaddr_in servaddr;
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
-    DesWrapper socket_wrapper(sock);
-    if (socket_wrapper.get() == -1) {
+    if (sock == -1) {
         cout << "Create socket error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
+    DesWrapper socket_wrapper(sock);
     cout << "Create socket success...\t"
          << "descriptor : " << socket_wrapper.get() << endl;
 
@@ -39,36 +39,28 @@ int main(int argc, char** argv) {
     }
     cout << "Connect to server success..." << endl;
 
-    char file_info[2048] = {0};
+    char file_info[128] = {0};
     char buf[65536] = {0};
     char file_path[128] = {0};
+    char file_name[128] = {0};
     cout << "Please enter the path of the file to be transferred: ";
-    scanf("%s", file_path);
+    cin >> file_path;
     fd = open(file_path, O_RDWR);
-    DesWrapper fd_wrapper(fd);
-    if (fd_wrapper.get() == -1) {
+    if (fd == -1) {
         cout << "Open error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Open success...\t"
-         << "descriptor : " << fd_wrapper.get() << endl;
-    char file_name[128] = {0};
+    DesWrapper fd_wrapper(fd);   
     strncpy(file_name, basename(file_path), sizeof(file_name));
-    if (fd_wrapper.get() == -1) {
-        cout << "Open [" << file_path << "] error...\t"
-             << "errno : " << errno << endl;
-        return -1;
-    }
-    cout << "Open [" << file_path << "] success..." << endl;
-
+    cout << "Open [" << file_path
+         << "] success... \tdescriptor : " << fd_wrapper.get() << endl;
+         
     int len = lseek(fd_wrapper.get(), 0, SEEK_END);
     lseek(fd, 0, SEEK_SET);
     cout << "file_size : " << len << endl;
-    // Store file size and file name in file_info
     sprintf(file_info, "%d", len);
     strcpy(file_info + 16, file_name);
-    // Tell server the name of the file to be uploaded
     int writeinfo = write(socket_wrapper.get(), file_info, 1024);
     if (writeinfo == -1) {
         cout << "Using function write error...\t"
@@ -109,6 +101,6 @@ int main(int argc, char** argv) {
         }
         cout << "Uploading ... " << (float)sent / len * 100 << "%" << endl;
     }
-    
+
     return 0;
 }
