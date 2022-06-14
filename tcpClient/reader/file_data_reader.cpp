@@ -2,14 +2,10 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-#include <wrapper.h>
+#include "wrapper.h"
+#include "file_data_reader.h"
 
-char file_info[128] = {0};
-char buf[65536] = {0};
-char file_path[128] = {0};
-char file_name[128] = {0};
-
-int open_data() {
+int File_Data_Reader::open_data(char* file_path,char* file_name,char* file_info) {
     int fd;
     fd = open(file_path, O_RDWR);
     if (fd == -1) {
@@ -27,11 +23,13 @@ int open_data() {
     cout << "file_size : " << len << endl;
     sprintf(file_info, "%d", len);
     strcpy(file_info + 16, file_name);
+    return fd;
 }
 
-int start_read(DesWrapper fd_wrapper) {
+int File_Data_Reader::read_data(int fd,char* buf,char file_name) 
+{
     memset(buf, 0, sizeof(buf));
-    int rn = read(fd_wrapper.get(), buf, sizeof(buf));
+    int rn = read(fd, buf, sizeof(buf));
     if (rn == 0) {
         cout << "Transfer [" << file_name << "] success..." << endl;
         // break;
@@ -41,4 +39,5 @@ int start_read(DesWrapper fd_wrapper) {
              << "errno : " << errno << endl;
         return -1;
     }
+    return rn;
 }

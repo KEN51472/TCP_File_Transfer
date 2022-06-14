@@ -1,10 +1,2 @@
-start: client_trans_controller
-cin_data_inputer.o:cin_data_inputer.cpp cin_data_inputer.h
-	g++ -c cin_data_inputer.cpp -o cin_data_inputer.o
-data_inputer.o:data_inputer.cpp data_inputer.h
-	g++ -c data_inputer.cpp -o data_inputer.o
-client_trans_controller.o:client_trans_controller.cpp cin_data_inputer.h data_inputer.h data_inputer
-	g++ -c client_trans_controller.cpp -o client_trans_controller.o
-client_trans_controller:cin_data_inputer.o data_inputer.o client_trans_controller.o
-	g++ -o client_trans_controller cin_data_inputer.o data_inputer.o client_trans_controller.o
-	
+client_trans_controller:
+	g++ -o client_trans_controller client_trans_controller.cpp inputer/cin_data_inputer.cpp inputer/data_inputer.cpp reader/data_reader.cpp reader/file_data_reader.cpp writer/data_writer.cpp writer/remote_data_writer.cpp writer/session.cpp -I inputer -I reader -I writer -I ..

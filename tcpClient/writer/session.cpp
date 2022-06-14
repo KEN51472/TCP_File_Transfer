@@ -2,12 +2,10 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <wrapper.h>
+#include "wrapper.h"
+#include "session.h"
 
-#define SERV_PORT 9877
-#define SERV_ADDR "127.0.0.1"
-
-int tcp_connect() {
+int Session::tcp_connect() {
     int ret, sock, fd;
     struct sockaddr_in servaddr;
     sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -33,13 +31,15 @@ int tcp_connect() {
         return -1;
     }
     cout << "Connect to server success..." << endl;
+    return socket_wrapper.get();
 }
 
-int start_write(DesWrapper socket_wrapper,char buf[],int left) {
-    int wn = write(socket_wrapper.get(), buf, left);
+int Session::write_data(int sock,char buf[],int left) {
+    int wn = write(sock, buf, left);
     if (wn == -1) {
         cout << "Using function write error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
+    return 0;
 }

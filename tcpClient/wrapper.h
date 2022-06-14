@@ -24,4 +24,4 @@ private:
     int descriptor_;
 };
 
-#endif 
+#endif
