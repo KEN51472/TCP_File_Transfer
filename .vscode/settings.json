@@ -1,0 +1,10 @@
+{
+    "editor.fontSize": 16,
+    "window.zoomLevel": 1.2,
+    "files.associations": {
+        "*.tcc": "cpp",
+        "type_traits": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp"
+    }
+}
