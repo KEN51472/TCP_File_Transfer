@@ -1,7 +1,6 @@
 #ifndef REMOTE_DATA_WRITER_H
 #define REMOTE_DATA_WRITER_H
 
-#include "wrapper.h"
 #include "data_writer.h"
 
 class Remote_Data_Writer 
@@ -17,9 +16,9 @@ public:
 
     };
     
-    virtual int tcp_connect();
+    virtual int link();
 
-    virtual int write_data(int sock,char buf[],int left);
+    virtual int write_data(int sock,char *buf);
 
 private:
 };

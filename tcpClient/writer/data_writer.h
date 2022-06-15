@@ -1,8 +1,6 @@
 #ifndef DATA_WRITER_H
 #define DATA_WRITER_H
 
-#include "wrapper.h"
-
 class Data_Writer 
 {
 public:
@@ -16,9 +14,9 @@ public:
 
     };
     
-    virtual int tcp_connect();
+    virtual int link();
 
-    virtual int write_data(int sock,char buf[],int left);
+    virtual int write_data(int sock,char *buf);
 
 private:
 };

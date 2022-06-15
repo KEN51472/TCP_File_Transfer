@@ -46,9 +46,9 @@ int childthread(int accept_sock) {
              << "errno : " << errno << endl;
         return -1;
     }
-    DesWrapper fd_wrapper(fd);
+    DesWrapper fdr_openwrapper(fd);
     cout << "Open success...\t"
-         << "descriptor : " << fd_wrapper.get() << endl;
+         << "descriptor : " << fdr_openwrapper.get() << endl;
 
     int received = 0;
     while (file_size != 0) {
@@ -66,7 +66,7 @@ int childthread(int accept_sock) {
         
         int left = rn;
         while (left > 0) {
-            int wn = write(fd_wrapper.get(), buf, left);
+            int wn = write(fdr_openwrapper.get(), buf, left);
             if (wn == -1) {
                 cout << "Using function write error...\t"
                      << "errno : " << errno << endl;
