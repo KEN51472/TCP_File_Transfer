@@ -7,44 +7,53 @@
 using namespace std;
 
 int File_Data_Reader::open_data(char *file_path)
-{
+{   
     fd = open(file_path, O_RDWR);
     if (fd == -1) {
         cout << "Open error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Open [" << file_path << "] success...  " << fd << endl;
-    strncpy(file_name, basename(file_path), sizeof(file_name));
-    len = lseek(fd, 0, SEEK_END);
-    lseek(fd, 0, SEEK_SET);
-    cout << "file_size : " << len << endl;
+    File_Data_Reader fdr_();
+    cout << "Open [" << file_path << "] success...  \tfd: " << fd << endl;
     return fd;
 }
 
-char *File_Data_Reader::init_buf()
+int File_Data_Reader::get_data_size(int fd)
 {
-    char *buf[len] = {0};
-    return *buf;
+    len = lseek(fd, 0, SEEK_END);
+    if(len < 0) {
+        return -1;
+    }
+    lseek(fd, 0, SEEK_SET);
+    cout << "file_size : " << len << endl;
+    return len;
+}
+
+char* File_Data_Reader::get_data_name(char* file_path)
+{
+    strncpy(file_name, basename(file_path), sizeof(file_name));
+    return file_name;
+}
+
+char *File_Data_Reader::init_buf(int len){
+    char *buf= new char[len];
+    return buf;
 }
 
 int File_Data_Reader::read_data(int fd, char *file_path, char *buf)
 {
     int file_read = 0;
-    while (1) {
-        int rn = read(fd, buf, 65536);
-        if (rn < 0) {
-            cout << "Function read error...\t"
-                 << "errno : " << errno << endl;
+    int rn = read(fd, buf, len);
+    if (rn < 0) {
+        cout << "Function read error...\t" << "errno : " << errno << endl;
             return -1;
-        }
-        file_read += rn;
-        if (file_read == len) {
-            cout << "Transfer [" << file_path << "] success..." << endl;
-            break;
-        }
-        cout << "Reading ... " << (float)file_read / len * 100 << "%" << endl;
     }
+    file_read += rn;
+    if (file_read == len) {
+        cout << "Transfer [" << file_path << "] success..." << endl;
+    }
+    cout << "Reading ... " << (float)file_read / len * 100 << "%" << endl;
     return file_read;
 }
 

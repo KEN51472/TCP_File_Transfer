@@ -5,5 +5,4 @@ int main()
     Client_Trans_Controller ctc;
     ctc.init();
     ctc.start();
-    ctc.destroy();
 }

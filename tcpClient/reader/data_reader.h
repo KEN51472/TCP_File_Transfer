@@ -14,11 +14,15 @@ public:
 
     };
 
-    virtual char *init_buf();
+    virtual int open_data(char *file_path);
 
     virtual int read_data(int fd, char *file_path, char *buf);
+    
+    virtual int get_data_size(int fd);
 
-    virtual int open_data(char *file_path);
+    virtual char* get_data_name(char *file_path);
+
+    virtual char* init_buf(int len);
 
 private:
 };

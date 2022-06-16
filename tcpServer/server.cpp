@@ -18,8 +18,8 @@ using namespace std;
 int childthread(int accept_sock) {
     char file_len[16] = {0};
     char file_name[128] = {0};
-    char buf[65536] = {0};
-    char filepath[65560] = {0};
+    char buf[1024] = {0};
+    char filepath[2048] = {0};
 
     DesWrapper accept_wrapper(accept_sock);
     int readname = read(accept_wrapper.get(), buf, 1024);
@@ -46,9 +46,9 @@ int childthread(int accept_sock) {
              << "errno : " << errno << endl;
         return -1;
     }
-    DesWrapper fdr_openwrapper(fd);
+    DesWrapper data_fdwrapper(fd);
     cout << "Open success...\t"
-         << "descriptor : " << fdr_openwrapper.get() << endl;
+         << "descriptor : " << data_fdwrapper.get() << endl;
 
     int received = 0;
     while (file_size != 0) {
@@ -66,7 +66,7 @@ int childthread(int accept_sock) {
         
         int left = rn;
         while (left > 0) {
-            int wn = write(fdr_openwrapper.get(), buf, left);
+            int wn = write(data_fdwrapper.get(), buf, left);
             if (wn == -1) {
                 cout << "Using function write error...\t"
                      << "errno : " << errno << endl;

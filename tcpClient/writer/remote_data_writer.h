@@ -3,7 +3,7 @@
 
 #include "data_writer.h"
 
-class Remote_Data_Writer 
+class Remote_Data_Writer:public Data_Writer
 {
 public:
     Remote_Data_Writer()
@@ -18,7 +18,9 @@ public:
     
     virtual int link();
 
-    virtual int write_data(int sock,char *buf);
+    virtual int write_data(int sock, char *buf, int data_size);
+
+    virtual int write_info(int sock, int len, char *file_name);
 
 private:
 };

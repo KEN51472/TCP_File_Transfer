@@ -11,7 +11,16 @@ int Data_Reader::open_data(char *file_path)
     return 0;
 }
 
-char *Data_Reader::init_buf()
+int Data_Reader::get_data_size(int fd)
+{   
+    return 0;
+}
+
+char* Data_Reader::get_data_name(char* file_path)
 {
+    return 0;
+}
+
+char *Data_Reader::init_buf(int len){
     return 0;
 }

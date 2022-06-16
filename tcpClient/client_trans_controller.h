@@ -7,29 +7,31 @@
 class Client_Trans_Controller
 {
 public:
-    Client_Trans_Controller()
-    {
+    Client_Trans_Controller(){
 
     };
-    
-    ~Client_Trans_Controller()
-    {
 
+    ~Client_Trans_Controller(){
+        
     };
 
     int init();
     int start();
-    int destroy();
 
-    
     Cin_Data_Inputer cdi;
     File_Data_Reader fdr;
     Session s;
-    
+    Data_Inputer *inputer = &cdi;
+    Data_Reader *reader = &fdr;
+    Data_Writer *writer = rdw;
+    Remote_Data_Writer *rdw = &s;
+
 private:
-    char *cdi_get;
-    int fdr_open;
+    char *data_path;
+    int data_fd = 0;
+    int data_size = 0;
+    char *data_name;
     char *buf;
-    int sock;
-};   
+    int sock = 0;
+};
 #endif

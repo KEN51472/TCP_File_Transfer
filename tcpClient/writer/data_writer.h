@@ -16,7 +16,9 @@ public:
     
     virtual int link();
 
-    virtual int write_data(int sock,char *buf);
+    virtual int write_data(int sock, char *buf, int data_size);
+
+    virtual int write_info(int sock, int len, char *file_name);
 
 private:
 };

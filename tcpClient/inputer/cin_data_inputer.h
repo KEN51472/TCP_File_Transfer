@@ -16,7 +16,7 @@ public:
 
     };
 
-    virtual char* get_data()  ;
+    char* get_data()  ;
 
 private:
     char file_path[128] = {0};

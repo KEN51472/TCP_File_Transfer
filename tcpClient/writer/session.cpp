@@ -17,7 +17,8 @@ int Session::link() {
         cout << "Create socket error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Create socket success...\t" << sock << endl;
+    Session s_();
+    cout << "Create socket success...\tsock: " << sock << endl;
 
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
@@ -35,40 +36,42 @@ int Session::link() {
     return sock;
 }
 
-int Session::write_data(int sock,char *buf) {
+int Session::write_data(int sock,char *buf,int file_size) {
     int file_write = 0;
-    while (1) {
-        int left = 65536;
-        while (left > 0)
-        {
-            int wn = write(sock, buf, 65536); 
-            if (wn == -1) {
-                cout << "Using function write error...\t" << "errno : " << errno << endl;
-                return -1;
-            }
-            left -= wn;
-            file_write += wn;
-            if (wn == 65536) {
-                break;
-            }
-            cout << "missing write size :" << left << "\trewrite:" << wn << endl;
+    int left = file_size;
+    while (left > 0)
+    {
+        int wn = write(sock, buf, left); 
+        if (wn == -1) {
+        cout << "Using function write error...\t" << "errno : " << errno << endl;
+        return -1;
         }
-        cout << "Uploading ... " << (float)file_write / sizeof(buf) * 100 << "%" << endl;
-        return file_write;
+        left -= wn;
+        file_write += wn;
+        if (left == 0) {
+            break;
+        }
+        cout << "missing write size :" << left << "\trewrite:" << wn << endl;
     }
+    cout << "Uploading ... " << (float)file_write / file_size * 100 << "%" << endl;
+    if (file_write = file_size) {
+        cout << "Trans success!" << endl;
+    }
+    delete[] buf;
+    return file_write;
 }
 
-// int Session::write_info(int sock)
-// {
-//     sprintf(file_info, "%d", len);
-//     strcpy(file_info + 16, file_name);
-//     int writeinfo = write(sock, file_info, 1024);
-//     if (writeinfo == -1) {
-//         cout << "Using function write error...\t" << "errno : " << errno << endl;
-//         return -1;
-//     }
-//     return 0;
+int Session::write_info(int sock,int len,char *file_name)
+{
+    sprintf(file_info, "%d", len);
+    strcpy(file_info + 16, file_name);
+    int writeinfo = write(sock, file_info, 1024);
+    if (writeinfo == -1) {
+        cout << "Using function write error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+    return 0;
 
-// }
+}
 
 
