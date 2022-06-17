@@ -14,12 +14,11 @@ int File_Data_Reader::open_data(char *file_path)
              << "errno : " << errno << endl;
         return -1;
     }
-    File_Data_Reader fdr_();
     cout << "Open [" << file_path << "] success...  \tfd: " << fd << endl;
     return fd;
 }
 
-int File_Data_Reader::get_data_size(int fd)
+int File_Data_Reader::get_data_size()
 {
     len = lseek(fd, 0, SEEK_END);
     if(len < 0) {
@@ -36,12 +35,12 @@ char* File_Data_Reader::get_data_name(char* file_path)
     return file_name;
 }
 
-char *File_Data_Reader::init_buf(int len){
+char *File_Data_Reader::init_buf(){
     char *buf= new char[len];
     return buf;
 }
 
-int File_Data_Reader::read_data(int fd, char *file_path, char *buf)
+int File_Data_Reader::read_data(char *file_path, char *buf)
 {
     int file_read = 0;
     int rn = read(fd, buf, len);

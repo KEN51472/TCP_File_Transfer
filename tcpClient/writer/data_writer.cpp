@@ -8,12 +8,12 @@ int Data_Writer::link()
     return 0;
 }
 
-int Data_Writer::write_data(int sock, char *buf, int data_size) 
+int Data_Writer::write_data(char *buf) 
 {
     return 0;
 }
 
-int Data_Writer::write_info(int sock,int len,char *file_name)
+int Data_Writer::write_info(char *buf,char *file_name)
 {
     return 0;
 }

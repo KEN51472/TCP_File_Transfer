@@ -20,6 +20,7 @@ public:
 
 private:
     char file_path[128] = {0};
+    
 };
 
 #endif 

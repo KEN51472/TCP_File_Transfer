@@ -17,6 +17,7 @@ public:
     virtual char* get_data();
 
 private:
+    
 };
 
 #endif

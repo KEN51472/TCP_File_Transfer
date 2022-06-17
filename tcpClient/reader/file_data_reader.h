@@ -22,13 +22,13 @@ public:
 
     int open_data(char *file_path);
 
-    int read_data(int fd, char *file_path, char *buf);
+    int read_data(char *file_path, char *buf);
     
-    int get_data_size(int fd);
+    int get_data_size();
 
     char* get_data_name(char *file_path);
 
-    char* init_buf(int len);
+    char* init_buf();
 
 private:
     int fd = 0;

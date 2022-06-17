@@ -2,6 +2,10 @@
 #define REMOTE_DATA_WRITER_H
 
 #include "data_writer.h"
+#include "session.h"
+#include <unistd.h>
+#include <iostream>
+using namespace std;
 
 class Remote_Data_Writer:public Data_Writer
 {
@@ -13,16 +17,21 @@ public:
 
     ~Remote_Data_Writer()
     {
-
+        close(sock);
+        cout << "sock " << sock << " closed success..." << endl;
     };
     
     virtual int link();
 
-    virtual int write_data(int sock, char *buf, int data_size);
+    virtual int write_data( char *buf);
 
-    virtual int write_info(int sock, int len, char *file_name);
+    virtual int write_info(char *buf,char *file_name);
+
 
 private:
+    char file_info[128] = {0};
+    int sock;
+    Session s;
 };
 
 #endif
