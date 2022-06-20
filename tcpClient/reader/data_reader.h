@@ -9,7 +9,7 @@ public:
 
     };
 
-    ~Data_Reader()
+    virtual ~Data_Reader()
     {
 
     };
@@ -17,12 +17,12 @@ public:
     virtual int open_data(char *file_path);
 
     virtual int read_data(char *file_path, char *buf);
-    
+
     virtual int get_data_size();
 
-    virtual char* get_data_name(char *file_path);
+    virtual char *get_data_name(char *file_path);
 
-    virtual char* init_buf();
+    virtual char *init_buf();
 
 private:
 };

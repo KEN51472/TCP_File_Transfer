@@ -7,11 +7,10 @@
 using namespace std;
 
 int File_Data_Reader::open_data(char *file_path)
-{   
+{
     fd = open(file_path, O_RDWR);
     if (fd == -1) {
-        cout << "Open error...\t"
-             << "errno : " << errno << endl;
+        cout << "Open error...\t" << "errno : " << errno << endl;
         return -1;
     }
     cout << "Open [" << file_path << "] success...  \tfd: " << fd << endl;
@@ -21,7 +20,7 @@ int File_Data_Reader::open_data(char *file_path)
 int File_Data_Reader::get_data_size()
 {
     len = lseek(fd, 0, SEEK_END);
-    if(len < 0) {
+    if (len <= 0) {
         return -1;
     }
     lseek(fd, 0, SEEK_SET);
@@ -29,14 +28,15 @@ int File_Data_Reader::get_data_size()
     return len;
 }
 
-char* File_Data_Reader::get_data_name(char* file_path)
+char *File_Data_Reader::get_data_name(char *file_path)
 {
     strncpy(file_name, basename(file_path), sizeof(file_name));
     return file_name;
 }
 
-char *File_Data_Reader::init_buf(){
-    char *buf= new char[len];
+char *File_Data_Reader::init_buf()
+{
+    char *buf = new char[len];
     return buf;
 }
 
@@ -46,13 +46,14 @@ int File_Data_Reader::read_data(char *file_path, char *buf)
     int rn = read(fd, buf, len);
     if (rn < 0) {
         cout << "Function read error...\t" << "errno : " << errno << endl;
-            return -1;
+        return -1;
     }
     file_read += rn;
+    
     if (file_read == len) {
         cout << "Transfer [" << file_path << "] success..." << endl;
     }
     cout << "Reading ... " << (float)file_read / len * 100 << "%" << endl;
+    close(fd);
     return file_read;
 }
-

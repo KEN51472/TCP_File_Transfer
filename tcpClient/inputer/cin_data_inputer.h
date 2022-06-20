@@ -3,24 +3,23 @@
 
 #include "data_inputer.h"
 
-class Cin_Data_Inputer : public Data_Inputer 
+class Cin_Data_Inputer : public Data_Inputer
 {
 public:
-    Cin_Data_Inputer() 
+    Cin_Data_Inputer()
     {
 
     };
 
-    ~Cin_Data_Inputer() 
+    ~Cin_Data_Inputer()
     {
 
     };
 
-    char* get_data()  ;
+    char *get_info();
 
 private:
     char file_path[128] = {0};
-    
 };
 
-#endif 
+#endif

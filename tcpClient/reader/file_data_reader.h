@@ -23,18 +23,17 @@ public:
     int open_data(char *file_path);
 
     int read_data(char *file_path, char *buf);
-    
+
     int get_data_size();
 
-    char* get_data_name(char *file_path);
+    char *get_data_name(char *file_path);
 
-    char* init_buf();
+    char *init_buf();
 
 private:
     int fd = 0;
     int len = 0;
     char file_name[128] = {0};
-    
 };
 
 #endif
