@@ -16,9 +16,9 @@ public:
 
     virtual int link();
 
-    virtual int write_data(char *buf, int len);
+    virtual int write_data(char *buf, int left);
 
-    virtual int write_info(char *buf, char *file_name, int len);
+    virtual int write_info(char *file_path, char *buf ,int size);
 
     virtual int destroy();
 

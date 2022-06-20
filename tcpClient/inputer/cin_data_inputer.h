@@ -16,10 +16,9 @@ public:
 
     };
 
-    char *get_info();
+    char *get_info(char *file_path);
 
 private:
-    char file_path[128] = {0};
 };
 
 #endif

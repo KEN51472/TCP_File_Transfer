@@ -13,39 +13,23 @@ int Remote_Data_Writer::link()
     return 0;
 }
 
-int Remote_Data_Writer::write_data(char *buf, int len)
+int Remote_Data_Writer::write_data(char *buf, int left)
 {
-    int file_write = 0;
-    int left = len;
-    while (left > 0) {
-        int wn = s.do_write(buf, left);
-        if (wn == -1) {
-            cout << "Using function write error...\t"
-                 << "errno : " << errno << endl;
-            return -1;
-        }
-        left -= wn;
-        file_write += wn;
-        if (left == 0) {
-            break;
-        }
-        cout << "missing write size :" << left << "\trewrite:" << wn << endl;
-    }
-    cout << "Uploading ... " << (float)file_write / len * 100 << "%" << endl;
-    
-    if (file_write = len) {
-        cout << "Trans success!" << endl;
-    }
-    delete[] buf;
-    return file_write;
+    int wn = s.do_write(buf, left);
+    if (wn == -1) {
+        cout << "Using function write error...\t" << "errno : " << errno << endl;
+        return -1;
+    } 
+    return wn;
 }
 
-int Remote_Data_Writer::write_info(char *buf, char *file_name, int len)
+int Remote_Data_Writer::write_info(char *file_path, char *buf ,int size)
 {
-    sprintf(file_info, "%d", len);
+    strcpy(file_name, basename(file_path));
+    sprintf(file_info, "%d", size);
     strcpy(file_info + 16, file_name);
     int writeinfo = s.do_write(file_info, 1024);
-    if (writeinfo == -1){
+    if (writeinfo == -1) {
         cout << "Using function write error...\t"
              << "errno : " << errno << endl;
         return -1;

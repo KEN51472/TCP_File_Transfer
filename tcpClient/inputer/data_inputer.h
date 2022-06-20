@@ -14,7 +14,7 @@ public:
 
     };
 
-    virtual char *get_info();
+    virtual char *get_info(char *file_path);
 
 private:
 };

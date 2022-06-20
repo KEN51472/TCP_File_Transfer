@@ -20,15 +20,16 @@ public:
 
     int link();
 
-    int write_data(char *buf, int len);
+    int write_data(char *buf, int left);
 
-    int write_info(char *buf, char *file_name, int len);
+    int write_info(char *file_path, char *buf ,int size);
 
     int destroy();
     
 
 private:
-    char file_info[128] = {0};
+    char *file_info;
+    char *file_name;
     Session s;
 };
 
