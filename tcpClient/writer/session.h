@@ -12,10 +12,10 @@ public:
     {
 
     };
-    
+
     ~Session()
-    {   
-        
+    {
+
     };
 
     int tcp_link();

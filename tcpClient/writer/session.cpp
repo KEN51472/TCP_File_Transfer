@@ -9,15 +9,8 @@ using namespace std;
 #define SERV_PORT 9877
 #define SERV_ADDR "127.0.0.1"
 
-// Session::Session()
-// {
-// }
-
-// Session::~Session()
-// {
-// }
-
-int Session::tcp_link() {
+int Session::tcp_link()
+{
     struct sockaddr_in servaddr;
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
@@ -31,8 +24,7 @@ int Session::tcp_link() {
     servaddr.sin_port = htons(SERV_PORT);
     inet_pton(AF_INET, SERV_ADDR, &servaddr.sin_addr);
 
-    ret = connect(sock, (struct sockaddr*)&servaddr,
-                  sizeof(servaddr));
+    ret = connect(sock, (struct sockaddr *)&servaddr, sizeof(servaddr));
     if (ret < 0) {
         cout << "Connect error...\t"
              << "errno : " << errno << endl;
@@ -41,7 +33,3 @@ int Session::tcp_link() {
     cout << "Connect to server success..." << endl;
     return sock;
 }
-
-
-
-

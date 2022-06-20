@@ -5,24 +5,24 @@
 #include <iostream>
 #include "remote_data_writer.h"
 
-
 using namespace std;
 
-int Remote_Data_Writer::link() 
-{   
+int Remote_Data_Writer::link()
+{
     sock = s.tcp_link();
     return sock;
 }
 
-int Remote_Data_Writer::write_data(char *buf) {
+int Remote_Data_Writer::write_data(char *buf, int len)
+{
     int file_write = 0;
-    int left = sizeof(buf);
-    while (left > 0)
-    {
-        int wn = write(sock, buf, left); 
+    int left = len;
+    while (left > 0) {
+        int wn = write(sock, buf, left);
         if (wn == -1) {
-        cout << "Using function write error...\t" << "errno : " << errno << endl;
-        return -1;
+            cout << "Using function write error...\t"
+                 << "errno : " << errno << endl;
+            return -1;
         }
         left -= wn;
         file_write += wn;
@@ -31,23 +31,23 @@ int Remote_Data_Writer::write_data(char *buf) {
         }
         cout << "missing write size :" << left << "\trewrite:" << wn << endl;
     }
-    cout << "Uploading ... " << (float)file_write / sizeof(buf) * 100 << "%" << endl;
-    if (file_write = sizeof(buf)) {
+    cout << "Uploading ... " << (float)file_write / len * 100 << "%" << endl;
+    
+    if (file_write = len) {
         cout << "Trans success!" << endl;
     }
-    delete[] buf;
     return file_write;
 }
 
-int Remote_Data_Writer::write_info(char *buf,char *file_name)
+int Remote_Data_Writer::write_info(char *buf, char *file_name, int len)
 {
-    sprintf(file_info, "%ld", sizeof(buf));
+    sprintf(file_info, "%d", len);
     strcpy(file_info + 16, file_name);
     int writeinfo = write(sock, file_info, 1024);
     if (writeinfo == -1) {
-        cout << "Using function write error...\t" << "errno : " << errno << endl;
+        cout << "Using function write error...\t"
+             << "errno : " << errno << endl;
         return -1;
     }
-    return 0;
-
+    return writeinfo;
 }

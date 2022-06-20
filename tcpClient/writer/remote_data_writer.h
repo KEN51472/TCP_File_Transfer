@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-class Remote_Data_Writer:public Data_Writer
+class Remote_Data_Writer : public Data_Writer
 {
 public:
     Remote_Data_Writer()
@@ -20,13 +20,12 @@ public:
         close(sock);
         cout << "sock " << sock << " closed success..." << endl;
     };
-    
+
     virtual int link();
 
-    virtual int write_data( char *buf);
+    virtual int write_data(char *buf, int len);
 
-    virtual int write_info(char *buf,char *file_name);
-
+    virtual int write_info(char *buf, char *file_name, int len);
 
 private:
     char file_info[128] = {0};
