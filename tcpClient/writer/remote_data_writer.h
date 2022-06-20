@@ -3,9 +3,7 @@
 
 #include "data_writer.h"
 #include "session.h"
-#include <unistd.h>
-#include <iostream>
-using namespace std;
+
 
 class Remote_Data_Writer : public Data_Writer
 {
@@ -17,19 +15,20 @@ public:
 
     ~Remote_Data_Writer()
     {
-        close(sock);
-        cout << "sock " << sock << " closed success..." << endl;
+        
     };
 
-    virtual int link();
+    int link();
 
-    virtual int write_data(char *buf, int len);
+    int write_data(char *buf, int len);
 
-    virtual int write_info(char *buf, char *file_name, int len);
+    int write_info(char *buf, char *file_name, int len);
+
+    int destroy();
+    
 
 private:
     char file_info[128] = {0};
-    int sock;
     Session s;
 };
 

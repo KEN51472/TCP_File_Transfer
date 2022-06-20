@@ -25,3 +25,8 @@ char *Data_Reader::init_buf()
 {
     return 0;
 }
+
+int Data_Reader::destroy()
+{
+    return 0;
+}

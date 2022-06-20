@@ -17,3 +17,8 @@ int Data_Writer::write_info(char *buf, char *file_name, int len)
 {
     return 0;
 }
+
+int Data_Writer::destroy()
+{
+    return 0;
+}

@@ -21,6 +21,7 @@ public:
 
     int init();
     int start();
+    int destroy();
 
 private:
     char *data_path;

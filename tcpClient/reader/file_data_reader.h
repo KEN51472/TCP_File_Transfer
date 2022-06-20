@@ -2,9 +2,6 @@
 #define FILE_DATA_READER_H
 
 #include "data_reader.h"
-#include <unistd.h>
-#include <iostream>
-using namespace std;
 
 class File_Data_Reader : public Data_Reader
 {
@@ -16,8 +13,7 @@ public:
 
     ~File_Data_Reader()
     {
-        close(fd);
-        cout << "fd " << fd << " closed success..." << endl;
+       
     };
 
     int open_data(char *file_path);
@@ -29,6 +25,8 @@ public:
     char *get_data_name(char *file_path);
 
     char *init_buf();
+
+    int destroy();
 
 private:
     int fd = 0;

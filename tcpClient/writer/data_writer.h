@@ -20,6 +20,8 @@ public:
 
     virtual int write_info(char *buf, char *file_name, int len);
 
+    virtual int destroy();
+
 private:
 };
 

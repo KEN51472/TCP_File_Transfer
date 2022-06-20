@@ -18,3 +18,10 @@ int Client_Trans_Controller::start()
     writer->write_data(buf, data_size);
     return 0;
 }
+
+int Client_Trans_Controller::destroy()
+{
+    reader->destroy();
+    writer->destroy();
+    return 0;
+}

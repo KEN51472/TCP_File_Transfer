@@ -24,6 +24,8 @@ public:
 
     virtual char *init_buf();
 
+    virtual int destroy();
+
 private:
 };
 

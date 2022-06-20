@@ -20,6 +20,10 @@ public:
 
     int tcp_link();
 
+    int do_write(char *buf,int size);
+
+    int destroy();
+
 private:
     int ret, sock, fd;
 };

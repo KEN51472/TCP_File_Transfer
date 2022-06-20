@@ -33,3 +33,16 @@ int Session::tcp_link()
     cout << "Connect to server success..." << endl;
     return sock;
 }
+
+int Session::do_write(char *buf,int size)
+{
+    int wn = write(sock, buf, size);
+    return wn;
+}
+
+int Session::destroy()
+{
+    close(sock);
+    cout << "sock " << sock << " closed success..." << endl;
+    return 0;
+}

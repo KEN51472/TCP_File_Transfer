@@ -30,7 +30,7 @@ int File_Data_Reader::get_data_size()
 
 char *File_Data_Reader::get_data_name(char *file_path)
 {
-    strncpy(file_name, basename(file_path), sizeof(file_name));
+    strcpy(file_name, basename(file_path));
     return file_name;
 }
 
@@ -54,6 +54,12 @@ int File_Data_Reader::read_data(char *file_path, char *buf)
         cout << "Transfer [" << file_path << "] success..." << endl;
     }
     cout << "Reading ... " << (float)file_read / len * 100 << "%" << endl;
-    close(fd);
     return file_read;
+}
+
+int File_Data_Reader::destroy()
+{   
+    close(fd);
+    cout << "fd " << fd << " closed success..." << endl;
+    return 0;
 }
