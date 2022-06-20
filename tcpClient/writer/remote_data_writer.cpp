@@ -36,6 +36,8 @@ int Remote_Data_Writer::write_data(char *buf, int len)
     if (file_write = len) {
         cout << "Trans success!" << endl;
     }
+    close(sock);
+    delete[] buf;
     return file_write;
 }
 
@@ -44,7 +46,7 @@ int Remote_Data_Writer::write_info(char *buf, char *file_name, int len)
     sprintf(file_info, "%d", len);
     strcpy(file_info + 16, file_name);
     int writeinfo = write(sock, file_info, 1024);
-    if (writeinfo == -1) {
+    if (writeinfo == -1){
         cout << "Using function write error...\t"
              << "errno : " << errno << endl;
         return -1;

@@ -9,7 +9,7 @@ public:
 
     };
 
-    ~Data_Writer()
+    virtual ~Data_Writer()
     {
 
     };
