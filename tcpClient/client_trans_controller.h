@@ -1,6 +1,8 @@
 #ifndef CLIENT_TRANS_CONTROLLER_H
 #define CLIENT_TRANS_CONTROLLER_H
 
+#include <unistd.h>
+#include <iostream>
 #include "data_inputer.h"
 #include "data_reader.h"
 #include "data_writer.h"
@@ -20,11 +22,13 @@ public:
 
     }
 
-    int init(char *file_path);
-    int start(char *file_path, char *buf);
+    int init();
+    int start();
     int destroy();
 
 private:
+    string path;
+    char *buf;
     int size;
     Data_Inputer *inputer;
     Data_Reader *reader;

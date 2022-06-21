@@ -1,6 +1,10 @@
 #ifndef DATA_WRITER_H
 #define DATA_WRITER_H
 
+#include <string>
+#include <iostream>
+using namespace std;
+
 class Data_Writer
 {
 public:
@@ -14,11 +18,9 @@ public:
 
     };
 
-    virtual int link();
+    virtual int open();
 
-    virtual int write(char *buf, int rn, int size);
-
-    virtual int write_info(char *file_path, char *buf ,int size);
+    virtual int write(char *buf, int size);
 
     virtual int destroy();
 

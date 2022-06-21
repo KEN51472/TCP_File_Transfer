@@ -1,6 +1,9 @@
 #ifndef DATA_INPUTER_H
 #define DATA_INPUTER_H
 
+#include <iostream>
+using namespace std;
+
 class Data_Inputer
 {
 public:
@@ -14,9 +17,8 @@ public:
 
     };
 
-    virtual char *get_info(char *file_path);
+    virtual string get_info();
 
-private:
 };
 
 #endif

@@ -1,19 +1,11 @@
-#include <iostream>
 #include "data_writer.h"
 
-using namespace std;
-
-int Data_Writer::link()
+int Data_Writer::open()
 {
     return 0;
 }
 
-int Data_Writer::write(char *buf, int rn, int size)
-{
-    return 0;
-}
-
-int Data_Writer::write_info(char *file_path, char *buf ,int size)
+int Data_Writer::write(char *buf, int size)
 {
     return 0;
 }

@@ -2,6 +2,7 @@
 #define CIN_DATA_INPUTER_H
 
 #include "data_inputer.h"
+#include <string>
 
 class Cin_Data_Inputer : public Data_Inputer
 {
@@ -16,9 +17,8 @@ public:
 
     };
 
-    char *get_info(char *file_path);
+    string get_info();
 
-private:
 };
 
 #endif

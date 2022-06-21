@@ -18,7 +18,7 @@ public:
 
     };
 
-    int tcp_link();
+    int open();
 
     int write(char *buf,int size);
 

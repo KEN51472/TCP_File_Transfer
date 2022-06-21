@@ -9,7 +9,7 @@ using namespace std;
 #define SERV_PORT 9877
 #define SERV_ADDR "127.0.0.1"
 
-int Session::tcp_link()
+int Session::open()
 {
     struct sockaddr_in servaddr;
     sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -37,12 +37,19 @@ int Session::tcp_link()
 int Session::write(char *buf, int size)
 {
     int wn = ::write(sock, buf, size);
+    if (wn == -1) {
+        cout << "Using function write error...\t"
+             << "errno : " << errno << endl;
+        return -1;
+    }
     return wn;
 }
 
 int Session::destroy()
-{
-    close(sock);
-    cout << "sock " << sock << " closed success..." << endl;
+{   
+    if(sock > 0) {
+        close(sock);
+        cout << "sock " << sock << " closed success..." << endl;
+    }
     return 0;
 }
