@@ -13,11 +13,11 @@ int Remote_Data_Writer::link()
     return 0;
 }
 
-int Remote_Data_Writer::write_data(char *buf, int rn, int size)
+int Remote_Data_Writer::write(char *buf, int rn, int size)
 {
     left = rn;
     while (left > 0) {
-        int wn = s.do_write(buf, left);
+        int wn = s.write(buf, left);
         if (wn == -1) {
             cout << "Using function write error...\t" << "errno : " << errno << endl;
             return -1;
@@ -36,16 +36,19 @@ int Remote_Data_Writer::write_data(char *buf, int rn, int size)
 int Remote_Data_Writer::write_info(char *file_path, char *buf ,int size)
 {   
     char *file_info = new char[128];
-    char *file_name = new char [128];
+    char *file_name = new char[128];
+
     strcpy(file_name, basename(file_path));
     sprintf(file_info, "%d", size);
     strcpy(file_info + 16, file_name);
-    int writeinfo = s.do_write(file_info, 1024);
-    if (writeinfo == -1) {
+
+    int wn = s.write(file_info, 1024);
+    if (wn == -1) {
         cout << "Using function write error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
+
     delete file_info;
     delete file_name;
     return 0;

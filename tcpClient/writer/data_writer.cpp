@@ -8,7 +8,7 @@ int Data_Writer::link()
     return 0;
 }
 
-int Data_Writer::write_data(char *buf, int rn, int size)
+int Data_Writer::write(char *buf, int rn, int size)
 {
     return 0;
 }

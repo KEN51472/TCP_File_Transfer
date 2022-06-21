@@ -20,7 +20,7 @@ public:
 
     int link();
 
-    int write_data(char *buf, int rn, int size);
+    int write(char *buf, int rn, int size);
 
     int write_info(char *file_path, char *buf ,int size);
 

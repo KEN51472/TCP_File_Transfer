@@ -6,8 +6,8 @@
 #include <unistd.h>
 using namespace std;
 
-int File_Data_Reader::open_data(char* file_path) {
-    fd = open(file_path, O_RDWR);
+int File_Data_Reader::open(char* file_path) {
+    fd = ::open(file_path, O_RDWR);
     if (fd == -1) {
         cout << "Open error...\t"
              << "errno : " << errno << endl;
@@ -20,9 +20,9 @@ int File_Data_Reader::open_data(char* file_path) {
     return size;
 }
 
-int File_Data_Reader::read_data(char* buf) {
-    memset(buf, 0, sizeof(buf));
-    int rn = read(fd, buf, 8192);
+int File_Data_Reader::read(char* buf) {
+    memset(buf, 0, 8192);
+    int rn = ::read(fd, buf, 8192);
     if (rn < 0) {
         cout << "Function read error...\t" << "errno : " << errno << endl;
         return -1;

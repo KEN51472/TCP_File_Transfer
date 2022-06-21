@@ -16,9 +16,9 @@ public:
        
     };
 
-    int open_data(char *file_path);
+    int open(char *file_path);
 
-    int read_data(char *buf);
+    int read(char *buf);
 
     int destroy();
 

@@ -34,9 +34,9 @@ int Session::tcp_link()
     return sock;
 }
 
-int Session::do_write(char *buf, int size)
+int Session::write(char *buf, int size)
 {
-    int wn = write(sock, buf, size);
+    int wn = ::write(sock, buf, size);
     return wn;
 }
 
