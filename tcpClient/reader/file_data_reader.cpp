@@ -6,7 +6,7 @@
 #include <unistd.h>
 using namespace std;
 
-int File_Data_Reader::open_data(char* file_path, int size) {
+int File_Data_Reader::open_data(char* file_path) {
     fd = open(file_path, O_RDWR);
     if (fd == -1) {
         cout << "Open error...\t"
@@ -17,7 +17,7 @@ int File_Data_Reader::open_data(char* file_path, int size) {
     size = lseek(fd, 0, SEEK_END);
     lseek(fd, 0, SEEK_SET);
     cout << "file_size : " << size << endl;
-    return fd;
+    return size;
 }
 
 int File_Data_Reader::read_data(char* buf) {

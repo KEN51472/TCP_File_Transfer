@@ -20,15 +20,15 @@ public:
 
     }
 
-    int init(char *file_path, int size);
-    int start(char *file_path, char *buf, int size);
+    int init(char *file_path);
+    int start(char *file_path, char *buf);
     int destroy();
 
 private:
+    int size;
     Data_Inputer *inputer;
     Data_Reader *reader;
     Data_Writer *writer;
-    int uploaded;
 };
 
 #endif

@@ -20,7 +20,7 @@ public:
 
     int link();
 
-    int write_data(char *buf, int left);
+    int write_data(char *buf, int rn, int size);
 
     int write_info(char *file_path, char *buf ,int size);
 
@@ -28,8 +28,8 @@ public:
     
 
 private:
-    char *file_info;
-    char *file_name;
+    int left;
+    int uploaded;
     Session s;
 };
 

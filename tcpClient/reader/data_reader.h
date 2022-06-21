@@ -14,7 +14,7 @@ public:
 
     };
 
-    virtual int open_data(char *file_path, int size);
+    virtual int open_data(char *file_path);
 
     virtual int read_data(char *buf);
 

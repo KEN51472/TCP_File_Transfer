@@ -16,7 +16,7 @@ public:
        
     };
 
-    int open_data(char *file_path, int size);
+    int open_data(char *file_path);
 
     int read_data(char *buf);
 
@@ -24,6 +24,7 @@ public:
 
 private:
     int fd = 0;
+    int size = 0;
 };
 
 #endif
