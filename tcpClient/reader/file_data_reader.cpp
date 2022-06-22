@@ -9,8 +9,7 @@ int File_Data_Reader::set(string &file_path)
 int File_Data_Reader::open()
 {
     fd_ = ::open(path_.c_str(), O_RDWR);
-    if (fd_ == -1)
-    {
+    if (fd_ == -1) {
         cout << "Open error...\t" << "errno : " << errno << endl;
         return -1;
     }
