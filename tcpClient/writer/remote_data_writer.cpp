@@ -13,9 +13,9 @@ int Remote_Data_Writer::open()
     return 0;
 }
 
-int Remote_Data_Writer::write(char *buf, int size)
+int Remote_Data_Writer::write(char *buf, int w_size)
 {
-    left = size;
+    left = w_size;
     while (left > 0) {
         int wn = s.write(buf, left);
         left -= wn;
@@ -24,6 +24,7 @@ int Remote_Data_Writer::write(char *buf, int size)
             break;
         }
     }
+    
     return uploaded;
 }
 

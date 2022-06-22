@@ -19,11 +19,8 @@ public:
     };
 
     int open();
-
-    int write(char *buf, int size);
-
-    int destroy();
-    
+    int write(char *buf, int w_size);
+    int destroy();  
 
 private:
     int left;

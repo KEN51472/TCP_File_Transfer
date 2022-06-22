@@ -18,16 +18,12 @@ public:
 
     };
 
-    virtual int open(string &file_path);
-
+    virtual int open();
     virtual int get_size();
-
     virtual int read_info(char *buf);
-
     virtual int read(char *buf);
-
+    virtual int set(string &file_path);
     virtual int destroy();
-
 };
 
 #endif

@@ -19,12 +19,8 @@ public:
     };
 
     virtual int open();
-
     virtual int write(char *buf, int size);
-
     virtual int destroy();
-
-private:
 };
 
 #endif

@@ -15,7 +15,12 @@ int Data_Reader::read_info(char *buf)
     return 0;
 }
 
-int Data_Reader::open(string &file_path)
+int Data_Reader::open()
+{
+    return 0;
+}
+
+int Data_Reader::set(string &file_path)
 {
     return 0;
 }

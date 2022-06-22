@@ -2,22 +2,21 @@
 
 using namespace std;
 
-
+char *buf = new char[8192];
 
 int Client_Trans_Controller::init()
 {
     path = inputer->get_info();
-    reader->open(path); 
+    reader->set(path);
+    reader->open(); 
     size = reader->get_size();
-    
+    reader->read_info(buf);
     writer->open();
     return 0;
 }
 
 int Client_Trans_Controller::start()
 {
-    char *buf = new char[8192];
-    reader->read_info(buf);
     writer->write(buf, 1024);
     while(1) {
         int rn = reader->read(buf);
@@ -26,8 +25,9 @@ int Client_Trans_Controller::start()
             break;
         }
         int wn = writer->write(buf, rn); 
-        cout << "Uploading ... " << (float)wn / size * 100 << "%" << endl;
+        cout << "Uploading ... " << (float)(wn - 1024) / size * 100 << "%" << endl;
     }
+
     return 0;
 }
 
@@ -35,5 +35,6 @@ int Client_Trans_Controller::destroy()
 {
     reader->destroy();
     writer->destroy();
+    delete buf;
     return 0;
 }

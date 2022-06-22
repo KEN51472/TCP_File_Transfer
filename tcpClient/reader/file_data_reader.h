@@ -23,20 +23,17 @@ public:
        
     };
 
-    int open(string &file_path);
-
+    int open();
     int get_size();
-
     int read_info(char *buf);
-
     int read(char *buf);
-
+    int set(string &file_path);
     int destroy();
 
 private:
-    const char *path;
-    int fd = 0;
-    int size = 0;
+    string path_;
+    int fd_ = 0;
+    int size_ = 0;
 };
 
 #endif

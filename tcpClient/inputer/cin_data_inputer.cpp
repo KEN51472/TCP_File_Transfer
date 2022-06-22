@@ -4,7 +4,7 @@ using namespace std;
 
 string Cin_Data_Inputer::get_info()
 {
-    string file_path(128,0);
+    string file_path = "";
     cout << "Please enter the path of the file to be transferred: " << endl;
     cin >> file_path;
     return file_path;

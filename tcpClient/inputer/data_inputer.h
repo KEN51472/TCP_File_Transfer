@@ -18,7 +18,6 @@ public:
     };
 
     virtual string get_info();
-
 };
 
 #endif

@@ -28,7 +28,6 @@ public:
 
 private:
     string path;
-    char *buf;
     int size;
     Data_Inputer *inputer;
     Data_Reader *reader;

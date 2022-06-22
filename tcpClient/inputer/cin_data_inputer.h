@@ -18,7 +18,6 @@ public:
     };
 
     string get_info();
-
 };
 
 #endif

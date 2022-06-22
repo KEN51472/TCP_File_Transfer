@@ -19,9 +19,7 @@ public:
     };
 
     int open();
-
     int write(char *buf,int size);
-
     int destroy();
 
 private:

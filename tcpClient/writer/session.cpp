@@ -26,22 +26,21 @@ int Session::open()
 
     ret = connect(sock, (struct sockaddr *)&servaddr, sizeof(servaddr));
     if (ret < 0) {
-        cout << "Connect error...\t"
-             << "errno : " << errno << endl;
+        cout << "Connect error...\t" << "errno : " << errno << endl;
         return -1;
     }
     cout << "Connect to server success..." << endl;
-    return sock;
+    return 0;
 }
 
-int Session::write(char *buf, int size)
+int Session::write(char *buf, int w_size)
 {
-    int wn = ::write(sock, buf, size);
+    int wn = ::write(sock, buf, w_size);
     if (wn == -1) {
-        cout << "Using function write error...\t"
-             << "errno : " << errno << endl;
+        cout << "Using function write error...\t" << "errno : " << errno << endl;
         return -1;
     }
+
     return wn;
 }
 
@@ -51,5 +50,6 @@ int Session::destroy()
         close(sock);
         cout << "sock " << sock << " closed success..." << endl;
     }
+
     return 0;
 }
