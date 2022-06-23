@@ -4,27 +4,25 @@
 #include <sys/socket.h>
 #include <iostream>
 #include "session.h"
-using namespace std;
 
-#define SERV_PORT 9877
-#define SERV_ADDR "127.0.0.1"
+using namespace std;
 
 int Session::open()
 {
     struct sockaddr_in servaddr;
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock == -1) {
+    sock_ = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock_ == -1) {
         cout << "Create socket error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Create socket success...\tsock: " << sock << endl;
+    cout << "Create socket success...\tsock: " << sock_ << endl;
 
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(SERV_PORT);
-    inet_pton(AF_INET, SERV_ADDR, &servaddr.sin_addr);
+    servaddr.sin_port = htons(serv_port_);
+    inet_pton(AF_INET, serv_addr_.c_str(), &servaddr.sin_addr);
 
-    ret = connect(sock, (struct sockaddr *)&servaddr, sizeof(servaddr));
+    int ret = connect(sock_, (struct sockaddr *)&servaddr, sizeof(servaddr));
     if (ret < 0) {
         cout << "Connect error...\t" << "errno : " << errno << endl;
         return -1;
@@ -33,22 +31,31 @@ int Session::open()
     return 0;
 }
 
-int Session::write(char *buf, int w_size)
+int Session::write(char *buf, int size)
 {
-    int wn = ::write(sock, buf, w_size);
-    if (wn == -1) {
-        cout << "Using function write error...\t" << "errno : " << errno << endl;
-        return -1;
+    int left = size;
+    int finished = 0;
+    while (left > 0) {
+        int wn = ::write(sock_, buf, left);
+        if (wn < 0) {
+            cout << "Session using function write error...\t" << "errno : " << errno << endl;
+            return -1;
+        }
+        left -= wn;
+        finished += wn;
+        if (left == 0) {
+            break;
+        }
     }
 
-    return wn;
+    return finished;
 }
 
 int Session::destroy()
 {   
-    if(sock > 0) {
-        close(sock);
-        cout << "sock " << sock << " closed success..." << endl;
+    if(sock_ > 0) {
+        close(sock_);
+        cout << "sock " << sock_ << " closed success..." << endl;
     }
 
     return 0;

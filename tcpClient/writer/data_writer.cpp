@@ -1,5 +1,10 @@
 #include "data_writer.h"
 
+int Data_Writer::set(int port, const string &address)
+{
+    return 0;
+}
+
 int Data_Writer::open()
 {
     return 0;

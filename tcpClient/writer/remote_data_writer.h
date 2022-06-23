@@ -18,13 +18,15 @@ public:
         
     };
 
+    int set(int port, const string &address);
     int open();
-    int write(char *buf, int w_size);
+    int write(char *buf, int size);
     int destroy();  
 
 private:
-    int left;
-    int uploaded;
+    int finished_;
+    int port_;
+    string address_;
     Session s;
 };
 
