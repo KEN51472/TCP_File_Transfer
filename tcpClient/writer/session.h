@@ -9,13 +9,17 @@ using namespace std;
 class Session
 {
 public:
-    Session(int port, const string &address):serv_port_(port), serv_addr_(address){};
+    Session()
+    {
+
+    };
 
     ~Session()
     {
 
     };
 
+    int set(int port, const string &address);
     int open();
     int write(char *buf,int size);
     int destroy();

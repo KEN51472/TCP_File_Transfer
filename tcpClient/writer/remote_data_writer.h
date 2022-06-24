@@ -26,9 +26,7 @@ public:
 
 private:
     int finished_;
-    int port_;
-    string address_;
-    unique_ptr<Session> s;
+    Session s;
 };
 
 #endif

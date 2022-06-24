@@ -7,6 +7,13 @@
 
 using namespace std;
 
+int Session::set(int port, const string &address)
+{
+    serv_port_ = port;
+    serv_addr_ = address;
+    return 0;
+}
+
 int Session::open()
 {
     struct sockaddr_in servaddr;

@@ -1,0 +1,4 @@
+#ifndef REMOTE_DATA_READER_H
+#define REMOTE_DATA_READER_H
+
+#endif
