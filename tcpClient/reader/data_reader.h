@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 class Data_Reader
@@ -20,9 +21,9 @@ public:
 
     virtual int open();
     virtual int get_size();
-    virtual int read_info(char *buf);
-    virtual int read(char *buf);
-    virtual int set(string &file_path);
+    virtual int read_info(char *buf, int size);
+    virtual int read(char *buf, int size);
+    virtual int set(const string &file_path);
     virtual int destroy();
 };
 

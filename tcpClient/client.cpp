@@ -12,8 +12,16 @@ int main()
     Data_Reader *r_impl = new File_Data_Reader;
     Data_Writer *w_impl = new Remote_Data_Writer;
     Client_Trans_Controller ctc(i_impl, r_impl, w_impl);
-    ctc.init();
-    ctc.start();
+    int ret = ctc.init();
+    if (ret < 0) {
+        cout << "Client using init error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+    ret = ctc.start();
+    if (ret < 0) {
+        cout << "Client using start error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
     ctc.destroy();
     delete i_impl;
     delete r_impl;

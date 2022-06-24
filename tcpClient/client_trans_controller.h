@@ -10,12 +10,8 @@
 class Client_Trans_Controller
 {
 public:
-    Client_Trans_Controller(Data_Inputer *i_impl, Data_Reader *r_impl, Data_Writer *w_impl)
-    {
-        inputer = i_impl;
-        reader = r_impl;
-        writer = w_impl;
-    }
+    Client_Trans_Controller(Data_Inputer *i_impl, Data_Reader *r_impl, Data_Writer *w_impl):
+                            inputer_(i_impl), reader_(r_impl), writer_(w_impl){}
 
     ~Client_Trans_Controller()
     {
@@ -27,11 +23,11 @@ public:
     int destroy();
 
 private:
-    string path;
-    int size;
-    Data_Inputer *inputer;
-    Data_Reader *reader;
-    Data_Writer *writer;
+    int size_;
+    char buf[8192];
+    Data_Inputer *inputer_;
+    Data_Reader *reader_;
+    Data_Writer *writer_;
 };
 
 #endif

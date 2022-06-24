@@ -25,13 +25,14 @@ public:
 
     int open();
     int get_size();
-    int read_info(char *buf);
-    int read(char *buf);
-    int set(string &file_path);
+    int read_info(char *buf, int size);
+    int read(char *buf, int size);
+    int set(const string &file_path);
     int destroy();
 
 private:
     string path_;
+    int finished_;
     int fd_ = 0;
     int size_ = 0;
 };

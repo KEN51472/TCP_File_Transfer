@@ -2,6 +2,7 @@
 #define DATA_INPUTER_H
 
 #include <iostream>
+
 using namespace std;
 
 class Data_Inputer

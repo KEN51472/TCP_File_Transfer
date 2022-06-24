@@ -1,6 +1,6 @@
 #include "file_data_reader.h"
 
-int File_Data_Reader::set(string &file_path)
+int File_Data_Reader::set(const string &file_path)
 {
     path_ = file_path;
     return 0;
@@ -9,11 +9,11 @@ int File_Data_Reader::set(string &file_path)
 int File_Data_Reader::open()
 {
     fd_ = ::open(path_.c_str(), O_RDWR);
-    if (fd_ == -1) {
-        cout << "Open error...\t" << "errno : " << errno << endl;
+    if (fd_ < 0) {
+        cout << "Reader using open error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Open [" << path_ << "] success...  \tfd: " << fd_ << endl;
+    cout << "Reader open [" << path_ << "] success...  \tfd is: " << fd_ << endl;
 
     return 0;
 }
@@ -26,9 +26,9 @@ int File_Data_Reader::get_size()
     return size_;
 }
 
-int File_Data_Reader::read_info(char *buf)
+int File_Data_Reader::read_info(char *buf, int size)
 {
-    memset(buf, 0, 8192);
+    memset(buf, 0, size);
     const char *s1 = to_string(size_).c_str();
     char *s2 = const_cast<char *>(s1);
     stpcpy(buf, s2);
@@ -36,16 +36,29 @@ int File_Data_Reader::read_info(char *buf)
     return 0;
 }
 
-int File_Data_Reader::read(char *buf)
+int File_Data_Reader::read(char *buf, int size)
 {
-    memset(buf, 0, 8192);
-    int rn = ::read(fd_, buf, 8192);
-    if (rn < 0) {
-        cout << "Function read error...\t" << "errno : " << errno << endl;
-        return -1;
+    memset(buf, 0, size);
+    int left = size;
+    while (left > 0) {
+        int rn = ::read(fd_, buf, size);
+        left -=rn;
+        finished_ += rn;
+        if (rn < 0) {
+            cout << "Reader using read error...\t" << "errno : " << errno << endl;
+            return -1;
+        }
+        if (left == 0) {
+            return rn;
+            break;
+        }
+        if (finished_ == size_) {
+            return rn;
+            break;
+        }
     }
 
-    return rn;
+    return 0;
 }
 
 int File_Data_Reader::destroy()
