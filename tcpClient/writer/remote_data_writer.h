@@ -1,6 +1,7 @@
 #ifndef REMOTE_DATA_WRITER_H
 #define REMOTE_DATA_WRITER_H
 
+#include <memory>
 #include "data_writer.h"
 #include "session.h"
 
@@ -27,7 +28,7 @@ private:
     int finished_;
     int port_;
     string address_;
-    Session s;
+    unique_ptr<Session> s;
 };
 
 #endif
