@@ -26,7 +26,7 @@ public:
 
 private:
     int finished_;
-    Session s;
+    Session s_;
 };
 
 #endif
