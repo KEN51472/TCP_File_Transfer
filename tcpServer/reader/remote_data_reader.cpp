@@ -3,13 +3,25 @@
 
 int Remote_Data_Reader::init()
 {
-    s_.init();
+    int ret = s_.init();
+    if (ret < 0)
+    {
+        cout << "Reader init error...\t"
+             << "errno : " << errno << endl;
+        return -1;
+    }
     return 0;
 }
 
 int Remote_Data_Reader::start()
 {
-    s_.start();
+    int ret = s_.start();
+    if (ret < 0)
+    {
+        cout << "Reader init error...\t"
+             << "errno : " << errno << endl;
+        return -1;
+    }
     return 0;
 }
 
@@ -17,11 +29,14 @@ int Remote_Data_Reader::open()
 {
     string file_path = "/home/code/tcp_download/recv-" + name_;
     int fd = ::open(file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
-    if (fd == -1) {
-        cout << "Open error...\t" << "errno : " << errno << endl;
+    if (fd == -1)
+    {
+        cout << "Open error...\t"
+             << "errno : " << errno << endl;
         return -1;
     }
-    cout << "Open success...\t" << "fd : " << fd << endl;
+    cout << "Open success...\t"
+         << "fd : " << fd << endl;
     return fd;
 }
 
@@ -56,9 +71,10 @@ int Remote_Data_Reader::read(char *buf, int sock, int size)
 }
 
 string Remote_Data_Reader::get_name(char *buf)
-{   
+{
     buf_ = buf;
-    for (int i = 16; i < 144; i++) {
+    for (int i = 16; i < 144; i++)
+    {
         name_ += buf_[i];
     }
     return name_;
@@ -67,9 +83,10 @@ string Remote_Data_Reader::get_name(char *buf)
 int Remote_Data_Reader::get_size(char *buf)
 {
     string file_size = "";
-    for (int i = 16; i < 144; i++) {
+    for (int i = 16; i < 144; i++)
+    {
         file_size += buf_[i];
     }
     int size = stoi(file_size);
-    return size;   
+    return size;
 }
