@@ -1,4 +1,6 @@
-#ifndef DATA_WRITER_H
-#define DATA_WRITER_H
+#include "data_writer.h"
 
-#endif
+int Data_Writer::write(int fd, char *buf, int size)
+{
+    return 0;
+}

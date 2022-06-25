@@ -1,8 +1,6 @@
 #ifndef CLIENT_TRANS_CONTROLLER_H
 #define CLIENT_TRANS_CONTROLLER_H
 
-#include <unistd.h>
-#include <iostream>
 #include "data_inputer.h"
 #include "data_reader.h"
 #include "data_writer.h"

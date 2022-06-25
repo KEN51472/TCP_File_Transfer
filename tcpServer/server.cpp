@@ -6,5 +6,19 @@
 
 int main()
 {
-    
+    Data_Reader *r_impl = new Remote_Data_Reader;
+    Data_Writer *w_impl = new File_Data_Writer;
+    Server_Trans_Controller stc(r_impl, w_impl);
+    int ret = stc.init();
+    if (ret < 0) {
+        cout << "Server using init error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+    ret = stc.start();
+    if (ret < 0) {
+        cout << "Server using start error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+    delete r_impl;
+    delete w_impl;
 }

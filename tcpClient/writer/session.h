@@ -2,6 +2,10 @@
 #define SESSION_H
 
 #include <unistd.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/socket.h>
 #include <iostream>
 
 using namespace std;

@@ -1,8 +1,3 @@
-#include <arpa/inet.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <iostream>
 #include "session.h"
 
 using namespace std;

@@ -1,7 +1,5 @@
 #include "client_trans_controller.h"
 
-using namespace std;
-
 int Client_Trans_Controller::init()
 {   
     string path = inputer_->get_info();
