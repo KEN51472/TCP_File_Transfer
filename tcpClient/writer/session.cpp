@@ -24,8 +24,7 @@ int Session::open()
     servaddr.sin_port = htons(serv_port_);
     inet_pton(AF_INET, serv_addr_.c_str(), &servaddr.sin_addr);
 
-    int ret = connect(sock_, (struct sockaddr *)&servaddr, sizeof(servaddr));
-    if (ret < 0) {
+    if (connect(sock_, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
         cout << "Connect error...\t" << "errno : " << errno << endl;
         return -1;
     }
