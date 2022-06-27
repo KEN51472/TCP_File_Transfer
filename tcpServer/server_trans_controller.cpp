@@ -35,6 +35,7 @@ int Server_Trans_Controller::trans(int sock){
     int size = reader_->get_size(buf);
     cout << "Ready to receive...... file name:[" << name << "] file size:[" << size << "]" << endl;
     int fd = reader_->open();
+    
     while(1) {
         int rn = reader_->read(buf, sock, 8192);
         if (rn < 0) {
