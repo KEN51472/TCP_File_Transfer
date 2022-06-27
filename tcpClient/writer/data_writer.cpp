@@ -1,6 +1,6 @@
 #include "data_writer.h"
 
-int Data_Writer::set(int port, const string &address)
+int Data_Writer::set(const string &address)
 {
     return 0;
 }

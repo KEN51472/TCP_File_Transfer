@@ -1,7 +1,12 @@
 #include "data_inputer.h"
 
-string Data_Inputer::get_info()
+string Data_Inputer::get_path()
 {
-    cout << "this is data_inputer" << endl;
     return 0;
 }
+
+string Data_Inputer::get_address()
+{
+    return 0;
+}
+

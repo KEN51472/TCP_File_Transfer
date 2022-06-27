@@ -26,7 +26,7 @@ int File_Data_Reader::get_size()
     return size_;
 }
 
-int File_Data_Reader::read_info(char *buf, int size)
+int File_Data_Reader::get_info(char *buf, int size)
 {
     memset(buf, 0, size);
     const char *s1 = to_string(size_).c_str();

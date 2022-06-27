@@ -2,15 +2,15 @@
 
 int Client_Trans_Controller::init()
 {   
-    string path = inputer_->get_info();
+    string address = inputer_->get_address();
+    string path = inputer_->get_path(); 
     reader_->set(path);
     if (reader_->open() < 0) {
         cout << "Controller using open error...\t" << "errno : " << errno << endl;
         return -1;
     }
     size_ = reader_->get_size();
-    reader_->read_info(buf, 8192);
-    writer_->set(9877, "127.0.0.1");
+    writer_->set(address);
     if (writer_->open() < 0) {
         cout << "Controller using connect error...\t" << "errno : " << errno << endl;
         return -1;
@@ -20,7 +20,9 @@ int Client_Trans_Controller::init()
 }
 
 int Client_Trans_Controller::start()
-{
+{   
+    char buf[8192] = {0};
+    reader_->get_info(buf, 8192);
     if (writer_->write(buf, 1024) < 0) {
         cout << "Controller using write error...\t" << "errno : " << errno << endl;
         return -1;

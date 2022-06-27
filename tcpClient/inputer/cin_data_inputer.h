@@ -17,7 +17,8 @@ public:
 
     };
 
-    string get_info();
+    string get_path();
+    string get_address();
 };
 
 #endif

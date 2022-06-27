@@ -10,6 +10,8 @@
 
 using namespace std;
 
+#define SERV_PORT 9877
+
 class Session
 {
 public:
@@ -23,14 +25,13 @@ public:
 
     };
 
-    int set(int port, const string &address);
+    int set(const string &address);
     int open();
     int write(char *buf,int size);
     int destroy();
 
 private:
     int sock_;
-    int serv_port_;
     string serv_addr_;
 };
 

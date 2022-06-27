@@ -19,7 +19,7 @@ public:
 
     };
 
-    virtual int set(int port, const string &address);
+    virtual int set(const string &address);
     virtual int open();
     virtual int write(char *buf, int size);
     virtual int destroy();

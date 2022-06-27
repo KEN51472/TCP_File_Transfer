@@ -18,7 +18,8 @@ public:
 
     };
 
-    virtual string get_info();
+    virtual string get_path();
+    virtual string get_address();
 };
 
 #endif

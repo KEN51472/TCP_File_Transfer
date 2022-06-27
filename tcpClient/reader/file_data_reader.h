@@ -25,7 +25,7 @@ public:
 
     int open();
     int get_size();
-    int read_info(char *buf, int size);
+    int get_info(char *buf, int size);
     int read(char *buf, int size);
     int set(const string &file_path);
     int destroy();

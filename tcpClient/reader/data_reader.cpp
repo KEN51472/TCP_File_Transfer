@@ -10,7 +10,7 @@ int Data_Reader::get_size()
     return 0;
 }
 
-int Data_Reader::read_info(char *buf, int size)
+int Data_Reader::get_info(char *buf, int size)
 {
     return 0;
 }

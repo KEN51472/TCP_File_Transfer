@@ -2,9 +2,8 @@
 
 using namespace std;
 
-int Session::set(int port, const string &address)
+int Session::set(const string &address)
 {
-    serv_port_ = port;
     serv_addr_ = address;
     return 0;
 }
@@ -21,7 +20,7 @@ int Session::open()
 
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(serv_port_);
+    servaddr.sin_port = htons(SERV_PORT);
     inet_pton(AF_INET, serv_addr_.c_str(), &servaddr.sin_addr);
 
     if (connect(sock_, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {

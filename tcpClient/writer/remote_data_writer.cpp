@@ -6,9 +6,9 @@
 
 using namespace std;
 
-int Remote_Data_Writer::set(int port, const string &address)
+int Remote_Data_Writer::set(const string &address)
 {
-    s_.set(port, address);
+    s_.set(address);
     return 0;
 }
 
