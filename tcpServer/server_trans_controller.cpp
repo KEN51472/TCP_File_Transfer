@@ -3,8 +3,7 @@
 
 int Server_Trans_Controller::init()
 {
-    int ret = reader_->init();
-    if (ret < 0) {
+    if (reader_->init() < 0) {
         cout << "Controller using init error...\t"
              << "errno : " << errno << endl;
         return -1;
@@ -14,7 +13,7 @@ int Server_Trans_Controller::init()
 
 int Server_Trans_Controller::start()
 {
-    while(1){
+    while(1) {
         int sock = reader_->start();
         if (sock < 0) {
             cout << "Controller start error...\t"
@@ -28,8 +27,7 @@ int Server_Trans_Controller::start()
 
 int Server_Trans_Controller::trans(int sock){
     char buf[8192] = {0};
-    int rn = reader_->read(buf, sock, 1024);
-    if (rn < 0) {
+    if (reader_->read(buf, sock, 1024) < 0) {
         cout << "Controller using function write error...\t" << "errno : " << errno << endl;
         return -1;
     }
@@ -38,7 +36,7 @@ int Server_Trans_Controller::trans(int sock){
     cout << "Ready to receive...... file name:[" << name << "] file size:[" << size << "]" << endl;
     int fd = reader_->open();
     while(1) {
-        rn = reader_->read(buf, sock, 8192);
+        int rn = reader_->read(buf, sock, 8192);
         if (rn < 0) {
             cout << "Controller using function write error...\t" << "errno : " << errno << endl;
             return -1;

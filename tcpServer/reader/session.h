@@ -34,7 +34,6 @@ public:
 
 private:
     int sock_;
-    int listen_sock_;
     int accept_sock_;
     socklen_t clilen;
     struct sockaddr_in cliaddr;
