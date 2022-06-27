@@ -12,7 +12,8 @@ int Remote_Data_Reader::init()
 }
 
 int Remote_Data_Reader::start()
-{   int ret = s_.start();
+{   
+    int ret = s_.start();
     if (ret < 0) {
         cout << "Reader init error...\t"
              << "errno : " << errno << endl;
@@ -48,11 +49,7 @@ int Remote_Data_Reader::read(char *buf, int sock, int size)
                  << "errno : " << errno << endl;
             return -1;
         }
-        if (left == 0) {
-            return rn;
-            break;
-        }
-        if ((finished_ -1024) == size_) {
+        if (left == 0 || (finished_ -1024) == size_) {
             return rn;
             break;
         }
