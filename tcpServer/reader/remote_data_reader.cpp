@@ -12,13 +12,13 @@ int Remote_Data_Reader::init()
 }
 
 int Remote_Data_Reader::start()
-{
-    if (s_.start() < 0) {
+{   int ret = s_.start();
+    if (ret < 0) {
         cout << "Reader init error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
-    return 0;
+    return ret;
 }
 
 int Remote_Data_Reader::open()
@@ -52,7 +52,7 @@ int Remote_Data_Reader::read(char *buf, int sock, int size)
             return rn;
             break;
         }
-        if (finished_ == size) {
+        if ((finished_ -1024) == size_) {
             return rn;
             break;
         }
@@ -63,9 +63,8 @@ int Remote_Data_Reader::read(char *buf, int sock, int size)
 
 string Remote_Data_Reader::get_name(char *buf)
 {
-    buf_ = buf;
-    for (int i = 16; i < 144; i++) {
-        name_ += buf_[i];
+    for (int i = 16; i < 1008; i++) {
+        name_ += buf[i];
     }
     return name_;
 }
@@ -73,9 +72,9 @@ string Remote_Data_Reader::get_name(char *buf)
 int Remote_Data_Reader::get_size(char *buf)
 {
     string file_size = "";
-    for (int i = 16; i < 144; i++) {
-        file_size += buf_[i];
+    for (int i = 0; i < 16; i++) {
+        file_size += buf[i];
     }
-    int size = stoi(file_size);
-    return size;
+    size_ = stoi(file_size);
+    return size_;
 }

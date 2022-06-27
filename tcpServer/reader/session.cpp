@@ -8,6 +8,7 @@ int Session::init()
              << "errno : " << errno << endl;
         return -1;
     }
+    cout << "Create socket success...\tsocket:" << sock_ << endl;
 
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);

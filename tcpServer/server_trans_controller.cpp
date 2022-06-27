@@ -31,8 +31,8 @@ int Server_Trans_Controller::trans(int sock){
         cout << "Controller using function write error...\t" << "errno : " << errno << endl;
         return -1;
     }
-    int size = reader_->get_size(buf);
     string name = reader_->get_name(buf);
+    int size = reader_->get_size(buf);
     cout << "Ready to receive...... file name:[" << name << "] file size:[" << size << "]" << endl;
     int fd = reader_->open();
     while(1) {

@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <iostream>
 #include <unistd.h>
-#include <string.h>
+#include <string>
 #include "data_reader.h"
 #include "session.h"
 
@@ -33,7 +33,7 @@ public:
 private:
     Session s_;
     string name_;
-    string buf_;
+    int size_;
     int finished_;
 };
 #endif
