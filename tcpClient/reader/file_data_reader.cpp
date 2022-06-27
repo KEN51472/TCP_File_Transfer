@@ -48,11 +48,7 @@ int File_Data_Reader::read(char *buf, int size)
             cout << "Reader using read error...\t" << "errno : " << errno << endl;
             return -1;
         }
-        if (left == 0) {
-            return rn;
-            break;
-        }
-        if (finished_ == size_) {
+        if (left == 0 || finished_ == size_) {
             return rn;
             break;
         }
