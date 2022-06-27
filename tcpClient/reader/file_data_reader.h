@@ -33,8 +33,8 @@ public:
 private:
     string path_;
     int finished_;
-    int fd_ = 0;
-    int size_ = 0;
+    int fd_;
+    int size_;
 };
 
 #endif

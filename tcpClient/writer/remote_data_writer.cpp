@@ -44,6 +44,5 @@ int Remote_Data_Writer::write(char *buf, int size)
 
 int Remote_Data_Writer::destroy()
 {
-    int ret = s_.destroy();
-    return ret;
+    return s_.destroy();
 }

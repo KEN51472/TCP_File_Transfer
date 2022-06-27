@@ -42,7 +42,7 @@ int File_Data_Reader::read(char *buf, int size)
     int left = size;
     while (left > 0) {
         int rn = ::read(fd_, buf, size);
-        left -=rn;
+        left -= rn;
         finished_ += rn;
         if (rn < 0) {
             cout << "Reader using read error...\t" << "errno : " << errno << endl;
