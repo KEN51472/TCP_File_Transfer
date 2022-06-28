@@ -5,9 +5,6 @@
 #include "data_reader.h"
 #include "data_writer.h"
 
-#define INFO_SIZE 1024
-#define FILE_SIZE 8192
-
 class Client_Trans_Controller
 {
 public:
