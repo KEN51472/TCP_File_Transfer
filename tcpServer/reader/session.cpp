@@ -30,7 +30,6 @@ int Session::init()
     }
 
     cout << "Listening success..." << endl;
-
     cout << "Waiting for client connection to complete..." << endl;
     return 0;
 }
