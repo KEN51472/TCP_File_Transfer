@@ -13,6 +13,7 @@ int File_Data_Reader::open()
         cout << "Reader using open error...\t" << "errno : " << errno << endl;
         return -1;
     }
+
     cout << "Reader open [" << path_ << "] success...  \tfd is: " << fd_ << endl;
 
     return 0;
@@ -48,6 +49,7 @@ int File_Data_Reader::read(char *buf, int size)
             cout << "Reader using read error...\t" << "errno : " << errno << endl;
             return -1;
         }
+        
         if (left == 0 || finished_ == size_) {
             return rn;
             break;

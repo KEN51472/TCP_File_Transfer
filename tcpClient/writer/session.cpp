@@ -16,6 +16,7 @@ int Session::open()
         cout << "Create socket error...\t" << "errno : " << errno << endl;
         return -1;
     }
+    
     cout << "Create socket success...\tsock: " << sock_ << endl;
 
     memset(&servaddr, 0, sizeof(servaddr));
@@ -27,6 +28,7 @@ int Session::open()
         cout << "Connect error...\t" << "errno : " << errno << endl;
         return -1;
     }
+
     cout << "Connect to server success..." << endl;
     return 0;
 }
@@ -41,6 +43,7 @@ int Session::write(char *buf, int size)
             cout << "Session using function write error...\t" << "errno : " << errno << endl;
             return -1;
         }
+
         left -= wn;
         finished += wn;
         if (left == 0) {

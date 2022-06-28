@@ -32,6 +32,7 @@ int Remote_Data_Writer::write(char *buf, int size)
             cout << "Writer using function write error...\t" << "errno : " << errno << endl;
             return -1;
         }
+        
         left -= wn;
         finished_ += wn;
         if (left == 0) {
