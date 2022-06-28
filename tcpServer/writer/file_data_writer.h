@@ -22,8 +22,5 @@ public:
     };
 
     int write(int fd, char *buf, int size);
-
-private:
-    int finished_;
 };
 #endif

@@ -2,6 +2,7 @@
 #define SERVER_TRANS_CONTROLLER_H
 
 #include <thread>
+#include <unistd.h>
 #include "data_reader.h"
 #include "data_writer.h"
 

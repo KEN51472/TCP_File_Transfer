@@ -8,6 +8,7 @@ int Remote_Data_Reader::init()
              << "errno : " << errno << endl;
         return -1;
     }
+
     return 0;
 }
 
@@ -19,21 +20,24 @@ int Remote_Data_Reader::start()
              << "errno : " << errno << endl;
         return -1;
     }
+
     return ret;
 }
 
 int Remote_Data_Reader::open()
 {
     string file_path = "/home/code/tcp_download/recv-" + name_;
-    int fd = ::open(file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
-    if (fd == -1) {
+    finished_ = 0;
+    fd_ = ::open(file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
+    if (fd_ == -1) {
         cout << "Open error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
+
     cout << "Open success...\t"
-         << "fd : " << fd << endl;
-    return fd;
+         << "fd : " << fd_ << endl;
+    return fd_;
 }
 
 int Remote_Data_Reader::read(char *buf, int sock, int size)
@@ -49,9 +53,9 @@ int Remote_Data_Reader::read(char *buf, int sock, int size)
                  << "errno : " << errno << endl;
             return -1;
         }
-        if (left == 0 || (finished_ -1024) == size_) {
+
+        if (left == 0 || (finished_) == size_) {
             return rn;
-            break;
         }
     }
 
@@ -60,9 +64,11 @@ int Remote_Data_Reader::read(char *buf, int sock, int size)
 
 string Remote_Data_Reader::get_name(char *buf)
 {
+    name_ = "";
     for (int i = 16; i < 1008; i++) {
         name_ += buf[i];
     }
+
     return name_;
 }
 
@@ -72,6 +78,18 @@ int Remote_Data_Reader::get_size(char *buf)
     for (int i = 0; i < 16; i++) {
         file_size += buf[i];
     }
+
     size_ = stoi(file_size);
     return size_;
+}
+
+int Remote_Data_Reader::destroy()
+{
+    if (fd_ > 0) {
+        close(fd_);
+        cout << "fd " << fd_ << " closed success..." << endl;
+    }
+
+    s_.destroy();
+    return 0;
 }

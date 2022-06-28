@@ -25,6 +25,7 @@ public:
     virtual string get_name(char *buf);
     virtual int get_size(char *buf);
     virtual int read(char *buf, int sock, int size);
+    virtual int destroy();
 };
 
 #endif

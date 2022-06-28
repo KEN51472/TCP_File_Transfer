@@ -30,3 +30,8 @@ int Data_Reader::get_size(char *buf)
 {
     return 0;
 }
+
+int Data_Reader::destroy()
+{
+    return 0;
+}

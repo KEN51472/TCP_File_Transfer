@@ -8,6 +8,7 @@ int Session::init()
              << "errno : " << errno << endl;
         return -1;
     }
+
     cout << "Create socket success...\tsocket:" << sock_ << endl;
 
     memset(&servaddr, 0, sizeof(servaddr));
@@ -19,6 +20,7 @@ int Session::init()
              << "errno : " << errno << endl;
         return -1;
     }
+
     cout << "Binding the port success..." << endl;
 
     if (listen(sock_, LISTENQ) == -1) {
@@ -26,6 +28,7 @@ int Session::init()
              << "errno : " << errno << endl;
         return -1;
     }
+
     cout << "Listening success..." << endl;
 
     cout << "Waiting for client connection to complete..." << endl;
@@ -41,6 +44,17 @@ int Session::start()
              << "errno : " << errno << endl;
         return -1;
     }
+
     cout << "Connect accept_sock " << accept_sock_ << " success..." << endl;
     return accept_sock_;
+}
+
+int Session::destroy()
+{
+    if (accept_sock_ > 0) {
+        close(accept_sock_);
+        cout << "accept socket " << accept_sock_ << " closed success..." << endl;
+    }
+
+    return 0;
 }

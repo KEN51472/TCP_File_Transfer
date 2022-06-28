@@ -29,11 +29,13 @@ public:
     int read(char *buf, int sock, int size);
     string get_name(char *buf);
     int get_size(char *buf);
+    int destroy();
     
 private:
     Session s_;
     string name_;
     int size_;
     int finished_;
+    int fd_;
 };
 #endif
