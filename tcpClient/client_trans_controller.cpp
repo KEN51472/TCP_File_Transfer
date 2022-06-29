@@ -22,15 +22,15 @@ int Client_Trans_Controller::init()
 
 int Client_Trans_Controller::start()
 {   
-    char buf[8192] = {0};
-    reader_->get_info(buf, 8192);
-    if (writer_->write(buf, 1024) < 0) {
+    char buf[BUFFER_SIZE] = {0};
+    reader_->get_info(buf, BUFFER_SIZE);
+    if (writer_->write(buf, INFO_SIZE) < 0) {
         cout << "Controller using write error...\t" << "errno : " << errno << endl;
         return -1;
     }
 
     while(1) {
-        int rn = reader_->read(buf, 8192);
+        int rn = reader_->read(buf, BUFFER_SIZE);
         if (rn < 0) {
             cout << "Writer using function write error...\t" << "errno : " << errno << endl;
             return -1;
@@ -52,7 +52,7 @@ int Client_Trans_Controller::start()
             return -1;
         }
 
-        cout << "Uploading ... " << (float)(wn - 1024) / size_ * 100 << "%" << endl;
+        cout << "Uploading ... " << (float)(wn - INFO_SIZE) / size_ * 100 << "%" << endl;
     }
 
     return 0;
