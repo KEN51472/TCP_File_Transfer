@@ -1,6 +1,6 @@
 #include "data_reader.h"
 
-int Data_Reader::read(char *buf, int sock, int size)
+int Data_Reader::read(char *buf, int sock, int b_size, int sent, int size)
 {
     return 0;
 }

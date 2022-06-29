@@ -27,7 +27,6 @@ int Remote_Data_Reader::start()
 int Remote_Data_Reader::open()
 {
     string file_path = "/home/code/tcp_download/recv-" + name_;
-    finished_ = 0;
     fd_ = ::open(file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
     if (fd_ == -1) {
         cout << "Open error...\t"
@@ -40,21 +39,21 @@ int Remote_Data_Reader::open()
     return fd_;
 }
 
-int Remote_Data_Reader::read(char *buf, int sock, int size)
+int Remote_Data_Reader::read(char *buf, int sock, int b_size, int sent ,int size)
 {
-    memset(buf, 0, size);
-    int left = size;
+    memset(buf, 0, b_size);
+    int left = b_size;
     while (left > 0) {
-        int rn = ::read(sock, buf, size);
+        int rn = ::read(sock, buf, b_size);
         left -= rn;
-        finished_ += rn;
+        sent += rn;
         if (rn < 0) {
             cout << "Reader using read error...\t"
                  << "errno : " << errno << endl;
             return -1;
         }
 
-        if (left == 0 || (finished_) == size_) {
+        if (left == 0 || sent == size) {
             return rn;
         }
     }

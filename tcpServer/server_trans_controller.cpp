@@ -28,8 +28,8 @@ int Server_Trans_Controller::start()
 }
 
 int Server_Trans_Controller::trans(int sock){
-    char buf[8192] = {0};
-    if (reader_->read(buf, sock, 1024) < 0) {
+    char buf[BUFFER_SIZE] = {0};
+    if (reader_->read(buf, sock, INFO_SIZE, 0, 1024) < 0) {
         cout << "Controller using function write error...\t" << "errno : " << errno << endl;
         return -1;
     }
@@ -41,7 +41,7 @@ int Server_Trans_Controller::trans(int sock){
     
     int sent = 0;
     while(1) {
-        int rn = reader_->read(buf, sock, 8192);
+        int rn = reader_->read(buf, sock, BUFFER_SIZE, sent ,size);
         if (rn < 0) {
             cout << "Controller using function write error...\t" << "errno : " << errno << endl;
             return -1;

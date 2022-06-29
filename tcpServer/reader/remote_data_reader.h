@@ -26,7 +26,7 @@ public:
     int init();
     int start();
     int open();
-    int read(char *buf, int sock, int size);
+    int read(char *buf, int sock, int b_size ,int sent ,int size);
     string get_name(char *buf);
     int get_size(char *buf);
     int destroy();
@@ -35,7 +35,6 @@ private:
     Session s_;
     string name_;
     int size_;
-    int finished_;
     int fd_;
 };
 #endif

@@ -6,6 +6,9 @@
 #include "data_reader.h"
 #include "data_writer.h"
 
+#define BUFFER_SIZE 8192
+#define INFO_SIZE   1024
+
 class Server_Trans_Controller
 {
 public:
