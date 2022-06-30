@@ -3,11 +3,20 @@
 
 #include <thread>
 #include <unistd.h>
+#include <vector>
 #include "data_reader.h"
 #include "data_writer.h"
 
 #define BUFFER_SIZE 8192
 #define INFO_SIZE   1024
+
+struct data_info
+{
+    int sock;
+    int size;
+    int sent;
+    int fd;
+};
 
 class Server_Trans_Controller
 {
@@ -24,12 +33,12 @@ public:
 
     int init();
     int start();
-    int trans(int sock);
+    int trans(vector<data_info> &v_, int i);
     
 private:
     Data_Reader *reader_;
     Data_Writer *writer_;
-    int size;
+    vector<data_info> v_;
 };
 
 #endif
