@@ -1,6 +1,6 @@
-#include "session.h"
+#include "server_session.h"
 
-int Session::init()
+int Server_Session::init()
 {
     sock_ = socket(AF_INET, SOCK_STREAM, 0);
     if (sock_ == -1) {
@@ -34,7 +34,7 @@ int Session::init()
     return 0;
 }
 
-int Session::start()
+int Server_Session::start()
 {
     clilen = sizeof(cliaddr);
     accept_sock_ = accept(sock_, (SA *)&cliaddr, &clilen);
@@ -48,7 +48,7 @@ int Session::start()
     return accept_sock_;
 }
 
-int Session::destroy()
+int Server_Session::destroy()
 {
     if (accept_sock_ > 0) {
         close(accept_sock_);

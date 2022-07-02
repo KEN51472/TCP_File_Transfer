@@ -1,5 +1,5 @@
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef SERVER_SESSION_H
+#define SERVER_SESSION_H
 
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -15,15 +15,15 @@ using namespace std;
 #define LISTENQ 1024
 #define SA struct sockaddr
 
-class Session
+class Server_Session
 {
 public:
-    Session()
+    Server_Session()
     {
 
     };
 
-    ~Session()
+    ~Server_Session()
     {
 
     };

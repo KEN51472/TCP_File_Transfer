@@ -6,8 +6,8 @@
 #include <iostream>
 #include <unistd.h>
 #include <string>
+#include <string.h>
 #include "data_reader.h"
-#include "session.h"
 
 using namespace std;
 
@@ -23,8 +23,7 @@ public:
 
     };
 
-    int init();
-    int start();
+    int set();
     int open();
     int read(char *buf, int sock, int b_size ,int sent ,int size);
     string get_name(char *buf);
@@ -32,7 +31,6 @@ public:
     int destroy();
     
 private:
-    Session s_;
     string name_;
     int size_;
     int fd_;

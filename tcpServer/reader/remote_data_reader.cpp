@@ -1,27 +1,8 @@
 #include "remote_data_reader.h"
-#include "session.h"
 
-int Remote_Data_Reader::init()
+int Remote_Data_Reader::set()
 {
-    if (s_.init() < 0) {
-        cout << "Reader init error...\t"
-             << "errno : " << errno << endl;
-        return -1;
-    }
-
     return 0;
-}
-
-int Remote_Data_Reader::start()
-{   
-    int ret = s_.start();
-    if (ret < 0) {
-        cout << "Reader init error...\t"
-             << "errno : " << errno << endl;
-        return -1;
-    }
-
-    return ret;
 }
 
 int Remote_Data_Reader::open()
@@ -89,6 +70,5 @@ int Remote_Data_Reader::destroy()
         cout << "fd " << fd_ << " closed success..." << endl;
     }
 
-    s_.destroy();
     return 0;
 }

@@ -1,3 +1,2 @@
 server:server.cpp
-	g++ -o server server.cpp server_trans_controller.cpp reader/data_reader.cpp reader/remote_data_reader.cpp reader/session.cpp writer/data_writer.cpp writer/file_data_writer.cpp -I reader -I writer -I .. -lpthread
-	
+	g++ -o server server.cpp server_trans_controller.cpp reader/data_reader.cpp reader/remote_data_reader.cpp writer/data_writer.cpp writer/file_data_writer.cpp inputer/data_inputer.cpp inputer/session_data_inputer.cpp io_session.cpp server_session.cpp -I /home/code/TCP_File_Transfer/tcpServer/ -I reader -I writer -I inputer -lpthread

@@ -6,23 +6,20 @@
 #include <vector>
 #include "data_reader.h"
 #include "data_writer.h"
+#include "data_inputer.h"
+#include "server_session.h"
+#include "io_session.h"
 
 #define BUFFER_SIZE 8192
 #define INFO_SIZE   1024
 
-struct data_info
-{
-    int sock;
-    int size;
-    int sent;
-    int fd;
-};
-
 class Server_Trans_Controller
 {
 public:
-    Server_Trans_Controller(Data_Reader *r_impl, 
+    Server_Trans_Controller(Data_Inputer *i_impl,
+                            Data_Reader *r_impl, 
                             Data_Writer *w_impl):
+                            inputer_(i_impl),
                             reader_(r_impl), 
                             writer_(w_impl){}
 
@@ -33,12 +30,13 @@ public:
 
     int init();
     int start();
-    int trans(vector<data_info> &v_, int i);
+    int trans(variant<std::monostate> is);
     
 private:
+    Data_Inputer *inputer_;
     Data_Reader *reader_;
     Data_Writer *writer_;
-    vector<data_info> v_;
+
 };
 
 #endif
