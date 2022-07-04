@@ -2,6 +2,7 @@
 #define DATA_INPUTER_H
 
 #include "boost/variant.hpp"
+#include "io_session.h"
 using namespace boost;
 
 class Data_Inputer
@@ -18,7 +19,7 @@ public:
     };
 
     virtual int init();
-    virtual variant<monostate> start();
+    virtual variant<int, Io_Session *> start();
 };
 
 #endif

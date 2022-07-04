@@ -11,7 +11,7 @@ int Session_Data_Inputer::init()
     return 0;
 }
 
-variant<std::monostate> Session_Data_Inputer::start()
+variant<int, Io_Session *> Session_Data_Inputer::start()
 {   
     int ret = ss_.start();
     if (ret < 0) {
@@ -21,7 +21,7 @@ variant<std::monostate> Session_Data_Inputer::start()
     }
     
     Io_Session *is = new Io_Session(ret);
-    variant<std::monostate> var;
+    variant<int, Io_Session *> var;
     var = is;
     cout << "new session"<< endl;
     return var;

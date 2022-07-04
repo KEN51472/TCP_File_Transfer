@@ -5,7 +5,7 @@ int Data_Inputer::init()
     return 0;
 }
 
-variant<monostate> Data_Inputer::start()
+variant<int, Io_Session *> Data_Inputer::start()
 {
     return 0;
 }

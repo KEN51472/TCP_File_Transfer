@@ -14,15 +14,15 @@ int Server_Trans_Controller::init()
 int Server_Trans_Controller::start()
 {   
     while(1) { 
-        variant<std::monostate> ret = inputer_->start();
-        thread t(&Server_Trans_Controller::trans, this, ref(ret));
+        variant<int, Io_Session *> ret = inputer_->start();
+        thread t(&Server_Trans_Controller::trans, this, ref(get<Io_Session *>(ret)));
         t.detach();
     }
 }
 
-int Server_Trans_Controller::trans(variant<std::monostate> is){
+int Server_Trans_Controller::trans(Io_Session *io){
     char buf[BUFFER_SIZE] = {0};
-    if (reader_->read(buf, is.get_sock(), INFO_SIZE, 0, INFO_SIZE) < 0) {
+    if (reader_->read(buf, io->get_sock(), INFO_SIZE, 0, INFO_SIZE) < 0) {
         cout << "Controller using function read error...\t" << "errno : " << errno << endl;
         return -1;
     }
@@ -34,7 +34,7 @@ int Server_Trans_Controller::trans(variant<std::monostate> is){
     
     int sent = 0;
     while(1) {
-        int rn = reader_->read(buf, is.get_sock(), BUFFER_SIZE, sent , size);
+        int rn = reader_->read(buf, io->get_sock(), BUFFER_SIZE, sent , size);
         if (rn < 0) {
             cout << "Controller using function write error...\t" << "errno : " << errno << endl;
             return -1;

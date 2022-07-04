@@ -13,6 +13,8 @@
 #define BUFFER_SIZE 8192
 #define INFO_SIZE   1024
 
+using namespace boost;
+
 class Server_Trans_Controller
 {
 public:
@@ -30,7 +32,7 @@ public:
 
     int init();
     int start();
-    int trans(variant<std::monostate> is);
+    int trans(Io_Session *io);
     
 private:
     Data_Inputer *inputer_;

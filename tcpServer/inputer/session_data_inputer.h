@@ -19,7 +19,7 @@ public:
     };
 
     int init();
-    variant<std::monostate> start();
+    variant<int, Io_Session *> start();
 
 private:
     Server_Session ss_;
