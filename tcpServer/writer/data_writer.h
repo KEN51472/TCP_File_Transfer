@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include "io_session.h"
 
 using namespace std;
 
@@ -19,7 +20,10 @@ public:
 
     };
 
-    virtual int write(int fd, char *buf, int size);
+    virtual int open(const string &name);
+    virtual int write(char *buf, int size);
+    virtual int destroy(Io_Session *is);
+    virtual int set(int file_size, Io_Session *is);
 };
 
 #endif

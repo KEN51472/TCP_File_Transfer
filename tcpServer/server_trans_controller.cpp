@@ -20,9 +20,9 @@ int Server_Trans_Controller::start()
     }
 }
 
-int Server_Trans_Controller::trans(Io_Session *io){
+int Server_Trans_Controller::trans(Io_Session *is) {
     char buf[BUFFER_SIZE] = {0};
-    if (reader_->read(buf, io->get_sock(), INFO_SIZE, 0, INFO_SIZE) < 0) {
+    if (reader_->read(buf, is, INFO_SIZE) < 0) {
         cout << "Controller using function read error...\t" << "errno : " << errno << endl;
         return -1;
     }
@@ -30,11 +30,12 @@ int Server_Trans_Controller::trans(Io_Session *io){
     string name = reader_->get_name(buf);
     int size = reader_->get_size(buf);
     cout << "Ready to receive...... file name:[" << name << "] file size:[" << size << "]" << endl;
-    int fd = reader_->open();
+    writer_->open(name);
+    writer_->set(size, is);
     
     int sent = 0;
     while(1) {
-        int rn = reader_->read(buf, io->get_sock(), BUFFER_SIZE, sent , size);
+        int rn = reader_->read(buf, is, BUFFER_SIZE);
         if (rn < 0) {
             cout << "Controller using function write error...\t" << "errno : " << errno << endl;
             return -1;
@@ -50,7 +51,7 @@ int Server_Trans_Controller::trans(Io_Session *io){
             return 0;
         }
 
-        int wn = writer_->write(fd, buf, rn); 
+        int wn = writer_->write(buf, rn); 
         if (wn < 0) {
             cout << "Controller using write error...\t" << "errno : " << errno << endl;
             return -1;
@@ -60,7 +61,7 @@ int Server_Trans_Controller::trans(Io_Session *io){
         cout << "Uploading ... " << (float) sent / size * 100 << "%" << endl;
     }
 
-    reader_->destroy();
+    writer_->destroy(is);
 
     return 0;
 

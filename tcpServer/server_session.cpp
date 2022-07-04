@@ -47,13 +47,3 @@ int Server_Session::start()
     cout << "Connect accept_sock " << accept_sock_ << " success..." << endl;
     return accept_sock_;
 }
-
-int Server_Session::destroy()
-{
-    if (accept_sock_ > 0) {
-        close(accept_sock_);
-        cout << "accept socket " << accept_sock_ << " closed success..." << endl;
-    }
-
-    return 0;
-}

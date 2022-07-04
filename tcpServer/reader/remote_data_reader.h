@@ -2,12 +2,11 @@
 #define REMOTE_DATA_READER_H
 
 #include <errno.h>
-#include <fcntl.h>
 #include <iostream>
 #include <unistd.h>
-#include <string>
 #include <string.h>
 #include "data_reader.h"
+#include "io_session.h"
 
 using namespace std;
 
@@ -23,16 +22,12 @@ public:
 
     };
 
-    int set();
     int open();
-    int read(char *buf, int sock, int b_size ,int sent ,int size);
+    int read(char *buf, Io_Session *is, int size);
     string get_name(char *buf);
     int get_size(char *buf);
-    int destroy();
     
 private:
-    string name_;
     int size_;
-    int fd_;
 };
 #endif

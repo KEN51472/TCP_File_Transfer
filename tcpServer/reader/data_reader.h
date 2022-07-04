@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "io_session.h"
 
 using namespace std;
 
@@ -19,13 +20,11 @@ public:
 
     };
 
-    virtual int open();
     virtual int init();
     virtual int start();
     virtual string get_name(char *buf);
     virtual int get_size(char *buf);
-    virtual int read(char *buf, int sock, int b_size, int sent, int size);
-    virtual int destroy();
+    virtual int read(char *buf, Io_Session *is, int size);
 };
 
 #endif

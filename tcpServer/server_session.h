@@ -30,7 +30,6 @@ public:
 
     int init();
     int start();
-    int destroy();
 
 private:
     int sock_;

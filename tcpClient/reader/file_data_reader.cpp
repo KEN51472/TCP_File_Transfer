@@ -52,7 +52,6 @@ int File_Data_Reader::read(char *buf, int size)
         
         if (left == 0 || finished_ == size_) {
             return rn;
-            break;
         }
     }
 

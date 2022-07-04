@@ -2,6 +2,11 @@
 #define IO_SESSION_H
 
 #include <iostream>
+#include <errno.h>
+#include <iostream>
+#include <unistd.h>
+
+#include <string.h>
 
 using namespace std;
 
@@ -15,16 +20,15 @@ public:
 
     ~Io_Session()
     {
-        cout <<"1111111111111"<<endl;
+       
     };
 
+    int set(int file_size);
     int get_sock();
-    int get_schedule();
-    int get_size();
+    int read(char *buf, int size);
 
 private:
     int sock_;
-    int schedule_;
     int size_;
 };
 

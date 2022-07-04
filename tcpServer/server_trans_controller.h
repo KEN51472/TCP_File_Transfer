@@ -7,7 +7,6 @@
 #include "data_reader.h"
 #include "data_writer.h"
 #include "data_inputer.h"
-#include "server_session.h"
 #include "io_session.h"
 
 #define BUFFER_SIZE 8192
@@ -32,7 +31,7 @@ public:
 
     int init();
     int start();
-    int trans(Io_Session *io);
+    int trans(Io_Session *is);
     
 private:
     Data_Inputer *inputer_;

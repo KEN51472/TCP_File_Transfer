@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <iostream>
 #include <unistd.h>
+#include <fcntl.h>
 #include "data_writer.h"
 
 using namespace std;
@@ -21,6 +22,13 @@ public:
 
     };
 
-    int write(int fd, char *buf, int size);
+    int set(int file_size, Io_Session *is);
+    int open(const string &name);
+    int write(char *buf, int size);
+    int destroy(Io_Session *is);
+
+private:
+    int fd_;
 };
+
 #endif

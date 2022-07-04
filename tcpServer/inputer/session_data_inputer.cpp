@@ -23,6 +23,5 @@ variant<int, Io_Session *> Session_Data_Inputer::start()
     Io_Session *is = new Io_Session(ret);
     variant<int, Io_Session *> var;
     var = is;
-    cout << "new session"<< endl;
     return var;
 }
