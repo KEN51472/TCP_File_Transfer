@@ -10,12 +10,12 @@ int Data_Writer::write(char *buf, int size)
     return 0;
 }
 
-int Data_Writer::destroy(Io_Session *is)
+int Data_Writer::destroy(any a)
 {
     return 0;
 }
 
-int Data_Writer::set(int file_size, Io_Session *is)
+int Data_Writer::set(int file_size, any a)
 {
     return 0;
 }

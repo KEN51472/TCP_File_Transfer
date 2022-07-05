@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "data_writer.h"
+#include "io_session.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ public:
     int set(int file_size, Io_Session *is);
     int open(const string &name);
     int write(char *buf, int size);
-    int destroy(Io_Session *is);
+    int destroy(any a);
 
 private:
     int fd_;

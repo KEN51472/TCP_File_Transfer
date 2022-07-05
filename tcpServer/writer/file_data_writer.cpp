@@ -42,8 +42,9 @@ int File_Data_Writer::write(char *buf, int size)
     return finished;
 }
 
-int File_Data_Writer::destroy(Io_Session *is)
+int File_Data_Writer::destroy(any a)
 {
+    Io_Session *is = any_cast<Io_Session *>(a);
     if (fd_ > 0) {
         close(fd_);
         cout << "fd " << fd_ << " closed success..." << endl;
@@ -52,7 +53,7 @@ int File_Data_Writer::destroy(Io_Session *is)
     int sock = is->get_sock();
     if (sock > 0) {
         close(sock);
-        cout << "sock" << sock << " closed success.." << endl;
+        cout << "sock " << sock << " closed success.." << endl;
     }
 
     return 0;

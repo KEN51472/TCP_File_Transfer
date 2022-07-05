@@ -23,7 +23,7 @@ public:
     };
 
     int open();
-    int read(char *buf, Io_Session *is, int size);
+    int read(char *buf, any a, int size);
     string get_name(char *buf);
     int get_size(char *buf);
     

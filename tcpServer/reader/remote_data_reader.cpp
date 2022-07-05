@@ -1,7 +1,8 @@
 #include "remote_data_reader.h"
 
-int Remote_Data_Reader::read(char *buf, Io_Session *is, int size)
+int Remote_Data_Reader::read(char *buf, any a, int size)
 {
+    Io_Session *is = any_cast<Io_Session *>(a);
     int finished = 0; 
     int left = size;
     while (left > 0) {

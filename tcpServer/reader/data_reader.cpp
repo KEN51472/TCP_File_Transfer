@@ -1,6 +1,6 @@
 #include "data_reader.h"
 
-int Data_Reader::read(char *buf, Io_Session *is, int size)
+int Data_Reader::read(char *buf, any a, int size)
 {
     return 0;
 }
