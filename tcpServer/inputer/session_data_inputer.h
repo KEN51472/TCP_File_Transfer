@@ -19,7 +19,7 @@ public:
     };
 
     int init();
-    variant<int, Io_Session *> start();
+    any start();
 
 private:
     Server_Session ss_;

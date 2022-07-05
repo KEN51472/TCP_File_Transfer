@@ -11,7 +11,7 @@ int Session_Data_Inputer::init()
     return 0;
 }
 
-variant<int, Io_Session *> Session_Data_Inputer::start()
+any Session_Data_Inputer::start()
 {   
     int ret = ss_.start();
     if (ret < 0) {
@@ -21,7 +21,6 @@ variant<int, Io_Session *> Session_Data_Inputer::start()
     }
     
     Io_Session *is = new Io_Session(ret);
-    variant<int, Io_Session *> var;
-    var = is;
-    return var;
+    any a = is;
+    return a;
 }

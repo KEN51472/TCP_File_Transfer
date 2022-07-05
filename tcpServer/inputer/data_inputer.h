@@ -1,8 +1,7 @@
 #ifndef DATA_INPUTER_H
 #define DATA_INPUTER_H
 
-#include "boost/variant.hpp"
-#include "io_session.h"
+#include "boost/any.hpp"
 using namespace boost;
 
 class Data_Inputer
@@ -19,7 +18,7 @@ public:
     };
 
     virtual int init();
-    virtual variant<int, Io_Session *> start();
+    virtual any start();
 };
 
 #endif

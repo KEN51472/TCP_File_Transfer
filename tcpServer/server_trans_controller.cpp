@@ -14,8 +14,8 @@ int Server_Trans_Controller::init()
 int Server_Trans_Controller::start()
 {   
     while(1) { 
-        variant<int, Io_Session *> ret = inputer_->start();
-        thread t(&Server_Trans_Controller::trans, this, ref(get<Io_Session *>(ret)));
+        any ret = inputer_->start();
+        thread t(&Server_Trans_Controller::trans, this, any_cast<Io_Session *>(ret));
         t.detach();
     }
 }
