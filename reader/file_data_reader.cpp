@@ -19,25 +19,22 @@ int File_Data_Reader::open()
     return 0;
 }
 
-int File_Data_Reader::get_size()
+string File_Data_Reader::get_info(char *buf, int a, int b)
 {
     size_ = lseek(fd_, 0, SEEK_END);
     lseek(fd_, 0, SEEK_SET);
     cout << "file_size : " << size_ << endl;
-    return size_;
-}
-
-int File_Data_Reader::get_info(char *buf, int size)
-{
-    memset(buf, 0, size);
-    const char *s1 = to_string(size_).c_str();
+    string size = to_string(size_);
+    memset(buf, 0, a);
+    const char *s1 = size.c_str();
     char *s2 = const_cast<char *>(s1);
     stpcpy(buf, s2);
     stpcpy(buf + 16, basename(path_.c_str()));
-    return 0;
+    
+    return size;
 }
 
-int File_Data_Reader::read(char *buf, int size)
+int File_Data_Reader::read(char *buf, any a ,int size)
 {
     memset(buf, 0, size);
     int left = size;

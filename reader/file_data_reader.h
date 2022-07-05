@@ -3,12 +3,8 @@
 
 #include <errno.h>
 #include <fcntl.h>
-#include <iostream>
 #include <unistd.h>
-#include <string.h>
 #include "data_reader.h"
-
-using namespace std;
 
 class File_Data_Reader : public Data_Reader
 {
@@ -24,9 +20,8 @@ public:
     };
 
     int open();
-    int get_size();
-    int get_info(char *buf, int size);
-    int read(char *buf, int size);
+    string get_info(char *buf, int a, int b);
+    int read(char *buf, any a, int size);
     int set(const string &file_path);
     int destroy();
 

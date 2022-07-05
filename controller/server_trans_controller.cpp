@@ -27,11 +27,10 @@ int Server_Trans_Controller::trans(Io_Session *is) {
         return -1;
     }
 
-    string name = reader_->get_name(buf);
-    int size = reader_->get_size(buf);
+    string name = reader_->get_info(buf, 16, 1024);
+    int size = stoi(reader_->get_info(buf, 0, 16));
     cout << "Ready to receive...... file name:[" << name << "] file size:[" << size << "]" << endl;
     writer_->open(name);
-    writer_->set(size, is);
     
     int sent = 0;
     while(1) {

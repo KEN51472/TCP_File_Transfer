@@ -3,12 +3,12 @@
 
 #include <iostream>
 #include <errno.h>
-#include <iostream>
 #include <unistd.h>
 #include "boost/any.hpp"
 #include <string.h>
 
 using namespace std;
+using namespace boost;
 
 class Io_Session
 {  
@@ -29,7 +29,6 @@ public:
 
 private:
     int sock_;
-    int size_;
 };
 
 #endif

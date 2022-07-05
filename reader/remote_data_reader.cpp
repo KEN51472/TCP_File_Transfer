@@ -22,24 +22,13 @@ int Remote_Data_Reader::read(char *buf, any a, int size)
     return 0;
 }
 
-string Remote_Data_Reader::get_name(char *buf)
+string Remote_Data_Reader::get_info(char *buf, int a, int b)
 {
-    string name_ = "";
-    for (int i = 16; i < 1008; i++) {
-        name_ += buf[i];
+    string info = "";
+    for (int i = a; i < b; i++) {
+        info += buf[i];
     }
 
-    return name_;
-}
-
-int Remote_Data_Reader::get_size(char *buf)
-{
-    string file_size = "";
-    for (int i = 0; i < 16; i++) {
-        file_size += buf[i];
-    }
-
-    size_ = stoi(file_size);
-    return size_;
+    return info;
 }
 

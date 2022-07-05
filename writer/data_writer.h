@@ -3,7 +3,9 @@
 
 #include <string>
 #include <iostream>
+#include <boost/any.hpp>
 
+using namespace boost;
 using namespace std;
 
 class Data_Writer
@@ -20,9 +22,9 @@ public:
     };
 
     virtual int set(const string &address);
-    virtual int open();
+    virtual int open(const string &name);
     virtual int write(char *buf, int size);
-    virtual int destroy();
+    virtual int destroy(any a);
 };
 
 #endif

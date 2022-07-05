@@ -1,8 +1,11 @@
 #ifndef DATA_INPUTER_H
 #define DATA_INPUTER_H
 
-#include "boost/any.hpp"
+#include <iostream>
+#include <boost/any.hpp>
+
 using namespace boost;
+using namespace std;
 
 class Data_Inputer
 {
@@ -17,6 +20,7 @@ public:
 
     };
 
+    virtual string get_info();
     virtual int init();
     virtual any start();
 };

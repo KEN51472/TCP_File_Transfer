@@ -15,12 +15,6 @@ int File_Data_Writer::open(const string &name)
     return fd_;
 }
 
-int File_Data_Writer::set(int file_size, Io_Session *is)
-{
-    is->set(file_size);
-    return 0;
-}
-
 int File_Data_Writer::write(char *buf, int size)
 {
     int left = size;

@@ -23,7 +23,6 @@ public:
 
     };
 
-    int set(int file_size, Io_Session *is);
     int open(const string &name);
     int write(char *buf, int size);
     int destroy(any a);

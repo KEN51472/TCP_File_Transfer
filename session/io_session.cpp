@@ -1,11 +1,5 @@
 #include "io_session.h"
 
-int Io_Session::set(int file_size)
-{
-    size_ = file_size;
-    return 0;
-}
-
 int Io_Session::get_sock()
 {
     return sock_;

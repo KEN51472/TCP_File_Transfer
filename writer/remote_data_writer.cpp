@@ -1,7 +1,3 @@
-#include <errno.h>
-#include <string.h>
-#include <unistd.h>
-#include <iostream>
 #include "remote_data_writer.h"
 
 using namespace std;
@@ -12,7 +8,7 @@ int Remote_Data_Writer::set(const string &address)
     return 0;
 }
 
-int Remote_Data_Writer::open()
+int Remote_Data_Writer::open(const string &name)
 {   
     int ret = s_.open();
     if (ret < 0) {
@@ -43,7 +39,7 @@ int Remote_Data_Writer::write(char *buf, int size)
     return finished_;
 }
 
-int Remote_Data_Writer::destroy()
+int Remote_Data_Writer::destroy(any a)
 {
     return s_.destroy();
 }

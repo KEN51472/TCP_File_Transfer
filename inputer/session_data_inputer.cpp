@@ -1,9 +1,17 @@
 #include "session_data_inputer.h"
 
+#define CHECK(p)                            \
+do{                                         \
+    if(!p) {                                \
+        cout << p <<" null ptr" << endl;    \
+        return -1;                          \
+    }                                       \
+}while(0) 
+
 int Session_Data_Inputer::init()
 {
     if (ss_.init() < 0) {
-        cout << "Reader init error...\t"
+        cout << "Inputer init error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
@@ -21,6 +29,7 @@ any Session_Data_Inputer::start()
     }
     
     Io_Session *is = new Io_Session(ret);
+    CHECK(is);
     any a = is;
     return a;
 }

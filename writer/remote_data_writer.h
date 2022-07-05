@@ -1,9 +1,10 @@
 #ifndef REMOTE_DATA_WRITER_H
 #define REMOTE_DATA_WRITER_H
 
-#include <memory>
+#include <errno.h>
+#include <unistd.h>
 #include "data_writer.h"
-#include "session.h"
+#include "client_session.h"
 
 
 class Remote_Data_Writer : public Data_Writer
@@ -20,9 +21,9 @@ public:
     };
 
     int set(const string &address);
-    int open();
+    int open(const string &name);
     int write(char *buf, int size);
-    int destroy();  
+    int destroy(any a);  
 
 private:
     int finished_;
