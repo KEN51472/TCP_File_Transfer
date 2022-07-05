@@ -5,7 +5,7 @@ int Client_Trans_Controller::init()
     cout << "Please enter the server address: " << endl;
     string address = inputer_->get_info();
     writer_->set(address);
-    if (writer_->open(0) < 0) {
+    if (writer_->open("0") < 0) {
         cout << "Controller using connect error...\t" << "errno : " << errno << endl;
         return -1;
     }
