@@ -28,7 +28,7 @@ string Remote_Data_Reader::get_info(char *buf, int a, int b)
     for (int i = a; i < b; i++) {
         info += buf[i];
     }
-    cout << info << endl;
+    
     return info;
 }
 

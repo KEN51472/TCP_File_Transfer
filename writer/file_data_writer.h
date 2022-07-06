@@ -26,9 +26,6 @@ public:
     int open(const string &name, any a);
     int write(char *buf, any a, int size);
     int destroy(any a);
-
-private:
-    int fd_;
 };
 
 #endif
