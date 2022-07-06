@@ -22,8 +22,8 @@ public:
     };
 
     virtual int set(const string &address);
-    virtual int open(const string &name);
-    virtual int write(char *buf, int size);
+    virtual int open(const string &name, any a);
+    virtual int write(char *buf, any a, int size);
     virtual int destroy(any a);
 };
 

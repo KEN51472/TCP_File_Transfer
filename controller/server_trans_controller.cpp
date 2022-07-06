@@ -30,7 +30,10 @@ int Server_Trans_Controller::trans(Io_Session *is) {
     string name = reader_->get_info(buf, 16, 1024);
     int size = stoi(reader_->get_info(buf, 0, 16));
     cout << "Ready to receive...... file name:[" << name << "] file size:[" << size << "]" << endl;
-    writer_->open(name);
+    if(writer_->open(name, is) < 0) {
+        cout << "Controller using function open error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
     
     int sent = 0;
     while(1) {
@@ -50,7 +53,7 @@ int Server_Trans_Controller::trans(Io_Session *is) {
             return 0;
         }
 
-        int wn = writer_->write(buf, rn); 
+        int wn = writer_->write(buf, is, rn); 
         if (wn < 0) {
             cout << "Controller using write error...\t" << "errno : " << errno << endl;
             return -1;

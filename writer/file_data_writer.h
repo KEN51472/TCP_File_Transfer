@@ -23,8 +23,8 @@ public:
 
     };
 
-    int open(const string &name);
-    int write(char *buf, int size);
+    int open(const string &name, any a);
+    int write(char *buf, any a, int size);
     int destroy(any a);
 
 private:

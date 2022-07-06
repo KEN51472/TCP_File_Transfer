@@ -8,7 +8,7 @@ int Remote_Data_Reader::read(char *buf, any a, int size)
     while (left > 0) {
         int rn = is->read(buf, left);
         if (rn == -1) {
-            cout << "Writer using function write error...\t" << "errno : " << errno << endl;
+            cout << "Reader using function read error...\t" << "errno : " << errno << endl;
             return -1;
         }
         
@@ -28,7 +28,7 @@ string Remote_Data_Reader::get_info(char *buf, int a, int b)
     for (int i = a; i < b; i++) {
         info += buf[i];
     }
-
+    cout << info << endl;
     return info;
 }
 

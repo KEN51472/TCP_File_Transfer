@@ -30,7 +30,6 @@ string File_Data_Reader::get_info(char *buf, int a, int b)
     char *s2 = const_cast<char *>(s1);
     stpcpy(buf, s2);
     stpcpy(buf + 16, basename(path_.c_str()));
-    
     return size;
 }
 

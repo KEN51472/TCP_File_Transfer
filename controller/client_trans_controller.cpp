@@ -5,7 +5,7 @@ int Client_Trans_Controller::init()
     cout << "Please enter the server address: " << endl;
     string address = inputer_->get_info();
     writer_->set(address);
-    if (writer_->open("0") < 0) {
+    if (writer_->open("0", 0) < 0) {
         cout << "Controller using connect error...\t" << "errno : " << errno << endl;
         return -1;
     }
@@ -25,7 +25,7 @@ int Client_Trans_Controller::start()
 {   
     char buf[BUFFER_SIZE] = {0};
     size_ = stoi(reader_->get_info(buf, BUFFER_SIZE, 0));
-    if (writer_->write(buf, INFO_SIZE) < 0) {
+    if (writer_->write(buf, 0, INFO_SIZE) < 0) {
         cout << "Controller using write error...\t" << "errno : " << errno << endl;
         return -1;
     }
@@ -47,7 +47,7 @@ int Client_Trans_Controller::start()
             return 0;
         }
 
-        int wn = writer_->write(buf, rn); 
+        int wn = writer_->write(buf, 0, rn); 
         if (wn < 0) {
             cout << "Controller using write error...\t" << "errno : " << errno << endl;
             return -1;

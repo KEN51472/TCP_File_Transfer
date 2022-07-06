@@ -8,7 +8,7 @@ int Remote_Data_Writer::set(const string &address)
     return 0;
 }
 
-int Remote_Data_Writer::open(const string &name)
+int Remote_Data_Writer::open(const string &name, any a)
 {   
     int ret = s_.open();
     if (ret < 0) {
@@ -19,7 +19,7 @@ int Remote_Data_Writer::open(const string &name)
     return 0;
 }
 
-int Remote_Data_Writer::write(char *buf, int size)
+int Remote_Data_Writer::write(char *buf, any a, int size)
 {   
     int left = size;
     while (left > 0) {

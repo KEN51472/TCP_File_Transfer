@@ -4,6 +4,7 @@
 #include <iostream>
 #include <errno.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "boost/any.hpp"
 #include <string.h>
 
@@ -23,12 +24,16 @@ public:
        
     };
 
-    int set(int file_size);
+
+    int open(string file_path);
     int get_sock();
+    int get_fd();
     int read(char *buf, int size);
+    int write(char *buf, int size);
 
 private:
     int sock_;
+    int fd_;
 };
 
 #endif

@@ -1,39 +1,33 @@
 #include "file_data_writer.h"
 
-int File_Data_Writer::open(const string &name)
+int File_Data_Writer::open(const string &name, any a)
 {
+    Io_Session *is = any_cast<Io_Session *>(a);
     string file_path = "/home/code/tcp_download/recv-" + name;
-    fd_ = ::open(file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
-    if (fd_ == -1) {
-        cout << "Open error...\t"
-             << "errno : " << errno << endl;
-        return -1;
-    }
-
-    cout << "Open success...\t"
-         << "fd : " << fd_ << endl;
-    return fd_;
+    is->open(file_path);
+    return 0;
 }
 
-int File_Data_Writer::write(char *buf, int size)
+int File_Data_Writer::write(char *buf, any a, int size)
 {
+    Io_Session *is = any_cast<Io_Session *>(a);
+    int finished = 0; 
     int left = size;
-    int finished = 0;
     while (left > 0) {
-        int wn = ::write(fd_, buf, left);
+        int wn = is->write(buf, left);
         if (wn == -1) {
             cout << "Writer using function write error...\t" << "errno : " << errno << endl;
             return -1;
         }
-
+        
         left -= wn;
         finished += wn;
         if (left == 0) {
-            break;
+            return finished;
         }
     }
 
-    return finished;
+    return 0;
 }
 
 int File_Data_Writer::destroy(any a)
