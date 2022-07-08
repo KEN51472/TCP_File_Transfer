@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -I ./controller -I ./inputer -I ./reader -I ./writer -I ./session 
+CFLAGS = -I ./controller -I ./inputer -I ./reader -I ./writer -I ./session -I ./json_spirit/ciere/json
 
 server_obj = server.o ./controller/server_trans_controller.o \
    ./inputer/data_inputer.o ./inputer/session_data_inputer.o \
@@ -17,13 +17,13 @@ all : server client
 .PHONY : all
 
 server : $(server_obj)
-	$(CC) -o server $(server_obj) -lpthread
+	$(CC) -o server $(server_obj) -L ./json_spirit/build -l json -lpthread
 
 $(server_obj) : %.o : %.cpp
 	$(CC) -c $(CFLAGS) $< -o $@
 
 client : $(client_obj)
-	$(CC) -o client $(client_obj)
+	$(CC) -o client $(client_obj) -L ./json_spirit/build -l json
 
 $(client_obj) : %.o : %.cpp
 	$(CC) -c $(CFLAGS) $< -o $@

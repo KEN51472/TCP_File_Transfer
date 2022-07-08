@@ -4,12 +4,21 @@
 
 部署与安装
 ---
+安装json_spirit
 
-    cd /tcpClient
+    cd TCP_File_Transfer
+    git clone https://github.com/cierelabs/json_spirit.git
+    cd json_spirit
+    mkdir build
+    cd build
+    cmake ..
     make
 
-    cd /tcpServer
+编译tcp_file_transfer
+    
+    cd TCP_File_Transfer
     make
+    make clean
 
 vscode相关配置
 ---
