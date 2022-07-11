@@ -22,7 +22,7 @@ public:
                             Data_Writer *w_impl):
                             inputer_(i_impl),
                             reader_(r_impl), 
-                            writer_(w_impl){}
+                            writer_(w_impl) {}
 
     ~Server_Trans_Controller()
     {

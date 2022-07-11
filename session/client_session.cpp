@@ -54,7 +54,7 @@ int Session::write(char *buf, int size)
 
 int Session::destroy()
 {   
-    if(sock_ > 0) {
+    if (sock_ > 0) {
         close(sock_);
         cout << "sock " << sock_ << " closed success..." << endl;
     }

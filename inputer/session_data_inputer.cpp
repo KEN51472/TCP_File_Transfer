@@ -6,7 +6,7 @@ do {                                         \
         cout << p <<" null ptr" << endl;    \
         return -1;                          \
     }                                       \
-} while(0) 
+} while (0) 
 
 int Session_Data_Inputer::init()
 {

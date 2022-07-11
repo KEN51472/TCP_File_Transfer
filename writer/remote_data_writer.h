@@ -15,7 +15,7 @@ public:
 
     };
 
-    ~Remote_Data_Writer()
+    virtual ~Remote_Data_Writer()
     {
         
     };

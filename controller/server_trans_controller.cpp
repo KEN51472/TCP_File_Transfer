@@ -33,7 +33,7 @@ int Server_Trans_Controller::trans(IO_Session *is) {
     reader_->get_info(buf, 0, 16, file_size);
     int size = stoi(file_size);
     cout << "Ready to receive...... file name:[" << file_name << "] file size:[" << size << "]" << endl;
-    if(writer_->open(file_name, is) < 0) {
+    if (writer_->open(file_name, is) < 0) {
         cout << "Controller using function open error...\t" << "errno : " << errno << endl;
         return -1;
     }

@@ -12,7 +12,7 @@ public:
 
     };
 
-    ~Cin_Data_Inputer()
+    virtual ~Cin_Data_Inputer()
     {
 
     };

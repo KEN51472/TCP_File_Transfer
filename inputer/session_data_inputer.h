@@ -13,7 +13,7 @@ public:
 
     };
 
-    ~Session_Data_Inputer()
+    virtual ~Session_Data_Inputer()
     {
 
     };

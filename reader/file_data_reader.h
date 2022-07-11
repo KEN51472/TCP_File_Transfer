@@ -14,7 +14,7 @@ public:
 
     };
 
-    ~File_Data_Reader()
+    virtual ~File_Data_Reader()
     {
        
     };

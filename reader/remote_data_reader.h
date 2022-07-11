@@ -14,7 +14,7 @@ public:
 
     };
 
-    ~Remote_Data_Reader()
+    virtual ~Remote_Data_Reader()
     {
 
     };

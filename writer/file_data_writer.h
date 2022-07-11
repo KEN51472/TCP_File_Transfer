@@ -18,7 +18,7 @@ public:
 
     };
 
-    ~File_Data_Writer()
+    virtual ~File_Data_Writer()
     {
 
     };
