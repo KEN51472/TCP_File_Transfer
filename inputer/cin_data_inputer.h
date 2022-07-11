@@ -17,7 +17,7 @@ public:
 
     };
 
-    string get_info();
+    bool get_info(string &info);
 };
 
 #endif

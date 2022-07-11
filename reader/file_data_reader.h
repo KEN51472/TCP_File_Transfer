@@ -20,14 +20,13 @@ public:
     };
 
     int open();
-    string get_info(char *buf, int a, int b);
+    bool get_info(char *buf, int a, int b, string &info);
     int read(char *buf, any a, int size);
-    int set(const string &file_path);
+    void set(const string &file_path);
     int destroy();
 
 private:
     string path_;
-    int finished_;
     int fd_;
     int size_;
 };

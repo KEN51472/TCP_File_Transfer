@@ -11,25 +11,27 @@
 using namespace std;
 using namespace boost;
 
-class Io_Session
+class IO_Session
 {  
 public:
-    Io_Session(int accept_sock):sock_(accept_sock)
+    IO_Session(int accept_sock):sock_(accept_sock)
     {
 
     };
 
-    ~Io_Session()
+    ~IO_Session()
     {
-       
+        if (sock_ > 0) {
+            close(sock_);
+            cout << "sock " << sock_ << " closed success.." << endl;
+        }
     };
 
 
     int open(string file_path);
-    int get_sock();
-    int get_fd();
     int read(char *buf, int size);
     int write(char *buf, int size);
+    int destroy();
 
 private:
     int sock_;

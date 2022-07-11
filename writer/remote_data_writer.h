@@ -20,13 +20,12 @@ public:
         
     };
 
-    int set(const string &address);
+    void set(const string &address);
     int open(const string &name, any a);
     int write(char *buf, any a, int size);
     int destroy(any a);  
 
 private:
-    int finished_;
     Session s_;
 };
 

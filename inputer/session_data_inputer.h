@@ -5,7 +5,7 @@
 #include "io_session.h"
 #include "data_inputer.h"
 
-class Session_Data_Inputer:public Data_Inputer
+class Session_Data_Inputer : public Data_Inputer
 {
 public:
     Session_Data_Inputer()

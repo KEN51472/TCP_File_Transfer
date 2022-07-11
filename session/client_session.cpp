@@ -36,22 +36,20 @@ int Session::open()
 int Session::write(char *buf, int size)
 {
     int left = size;
-    int finished = 0;
     while (left > 0) {
-        int wn = ::write(sock_, buf, left);
+        int wn = ::write(sock_, buf + size - left, left);
         if (wn < 0) {
             cout << "Session using function write error...\t" << "errno : " << errno << endl;
             return -1;
         }
 
         left -= wn;
-        finished += wn;
         if (left == 0) {
-            break;
+            return size - left;
         }
     }
 
-    return finished;
+    return 0;
 }
 
 int Session::destroy()

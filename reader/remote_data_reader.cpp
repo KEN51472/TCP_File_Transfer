@@ -2,33 +2,30 @@
 
 int Remote_Data_Reader::read(char *buf, any a, int size)
 {
-    Io_Session *is = any_cast<Io_Session *>(a);
-    int finished = 0; 
+    IO_Session *is = any_cast<IO_Session *>(a);
     int left = size;
     while (left > 0) {
-        int rn = is->read(buf, left);
+        int rn = is->read(buf + size - left, left);
         if (rn == -1) {
             cout << "Reader using function read error...\t" << "errno : " << errno << endl;
             return -1;
         }
         
         left -= rn;
-        finished += rn;
         if (left == 0 || rn == 0) {
-            return finished;
+            return size - left;
         }
     }
 
     return 0;
 }
 
-string Remote_Data_Reader::get_info(char *buf, int a, int b)
+bool Remote_Data_Reader::get_info(char *buf, int a, int b, string &info)
 {
-    string info = "";
     for (int i = a; i < b; i++) {
         info += buf[i];
     }
     
-    return info;
+    return 0;
 }
 

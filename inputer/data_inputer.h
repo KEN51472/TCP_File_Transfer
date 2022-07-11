@@ -20,7 +20,7 @@ public:
 
     };
 
-    virtual string get_info();
+    virtual bool get_info(string &info);
     virtual int init();
     virtual any start();
 };

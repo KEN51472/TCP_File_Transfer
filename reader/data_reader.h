@@ -22,9 +22,9 @@ public:
     };
 
     virtual int open();
-    virtual string get_info(char *buf, int a, int b);
-    virtual int read(char *buf, any a, int size);
-    virtual int set(const string &file_path);
+    virtual bool get_info(char *buf, int a, int b, string &info) = 0;
+    virtual int read(char *buf, any a, int size) = 0;
+    virtual void set(const string &file_path);
     virtual int destroy();
 };
 

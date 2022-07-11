@@ -1,6 +1,6 @@
 #include "data_inputer.h"
 
-string Data_Inputer::get_info()
+bool Data_Inputer::get_info(string &info)
 {
     return 0;
 }

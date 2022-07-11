@@ -3,7 +3,8 @@
 int Client_Trans_Controller::init()
 {   
     cout << "Please enter the server address: " << endl;
-    string address = inputer_->get_info();
+    string address = "";
+    inputer_->get_info(address);
     writer_->set(address);
     if (writer_->open("0", 0) < 0) {
         cout << "Controller using connect error...\t" << "errno : " << errno << endl;
@@ -11,7 +12,8 @@ int Client_Trans_Controller::init()
     }
 
     cout << "Please enter the path of the file to be transferred: " << endl;
-    string path = inputer_->get_info(); 
+    string path = "";
+    inputer_->get_info(path); 
     reader_->set(path);
     if (reader_->open() < 0) {
         cout << "Controller using open error...\t" << "errno : " << errno << endl;
@@ -24,12 +26,16 @@ int Client_Trans_Controller::init()
 int Client_Trans_Controller::start()
 {   
     char buf[BUFFER_SIZE] = {0};
-    size_ = stoi(reader_->get_info(buf, BUFFER_SIZE, 0));
+    string info = "";
+    reader_->get_info(buf, BUFFER_SIZE, 0, info);
+    size_ = stoi(info);
+    
     if (writer_->write(buf, 0, INFO_SIZE) < 0) {
         cout << "Controller using write error...\t" << "errno : " << errno << endl;
         return -1;
     }
 
+    int sent = 0;
     while(1) {
         int rn = reader_->read(buf, 0, BUFFER_SIZE);
         if (rn < 0) {
@@ -53,7 +59,8 @@ int Client_Trans_Controller::start()
             return -1;
         }
 
-        cout << "Uploading ... " << (float)(wn - INFO_SIZE) / size_ * 100 << "%" << endl;
+        sent += wn;
+        cout << "Uploading ... " << (float) sent / size_ * 100 << "%" << endl;
     }
 
     return 0;

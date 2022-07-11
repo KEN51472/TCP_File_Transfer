@@ -31,7 +31,7 @@ public:
 
     int init();
     int start();
-    int trans(Io_Session *is);
+    int trans(IO_Session *is);
     
 private:
     Data_Inputer *inputer_;

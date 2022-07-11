@@ -6,7 +6,7 @@
 #include "data_reader.h"
 #include "io_session.h"
 
-class Remote_Data_Reader:public Data_Reader
+class Remote_Data_Reader : public Data_Reader
 {
 public:
     Remote_Data_Reader()
@@ -20,7 +20,7 @@ public:
     };
 
     int read(char *buf, any a, int size);
-    string get_info(char *buf, int a, int b);
+    bool get_info(char *buf, int a, int b, string &info);
     
 private:
     int size_;

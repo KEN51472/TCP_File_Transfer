@@ -1,9 +1,8 @@
 #include "file_data_reader.h"
 
-int File_Data_Reader::set(const string &file_path)
+void File_Data_Reader::set(const string &file_path)
 {
     path_ = file_path;
-    return 0;
 }
 
 int File_Data_Reader::open()
@@ -19,7 +18,7 @@ int File_Data_Reader::open()
     return 0;
 }
 
-string File_Data_Reader::get_info(char *buf, int a, int b)
+bool File_Data_Reader::get_info(char *buf, int a, int b, string &info)
 {
     size_ = lseek(fd_, 0, SEEK_END);
     lseek(fd_, 0, SEEK_SET);
@@ -30,7 +29,8 @@ string File_Data_Reader::get_info(char *buf, int a, int b)
     char *s2 = const_cast<char *>(s1);
     stpcpy(buf, s2);
     stpcpy(buf + 16, basename(path_.c_str()));
-    return size;
+    info = size;
+    return 0;
 }
 
 int File_Data_Reader::read(char *buf, any a ,int size)
@@ -38,16 +38,15 @@ int File_Data_Reader::read(char *buf, any a ,int size)
     memset(buf, 0, size);
     int left = size;
     while (left > 0) {
-        int rn = ::read(fd_, buf, size);
+        int rn = ::read(fd_, buf + size - left, size);
         left -= rn;
-        finished_ += rn;
         if (rn < 0) {
             cout << "Reader using read error...\t" << "errno : " << errno << endl;
             return -1;
         }
         
-        if (left == 0 || finished_ == size_) {
-            return rn;
+        if (left == 0 || rn == 0) {
+            return size - left;
         }
     }
 

@@ -21,10 +21,10 @@ public:
 
     };
 
-    virtual int set(const string &address);
-    virtual int open(const string &name, any a);
-    virtual int write(char *buf, any a, int size);
-    virtual int destroy(any a);
+    virtual void set(const string &address);
+    virtual int open(const string &name, any a) = 0;
+    virtual int write(char *buf, any a, int size) = 0;
+    virtual int destroy(any a) = 0;
 };
 
 #endif

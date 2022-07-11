@@ -2,9 +2,8 @@
 
 using namespace std;
 
-string Cin_Data_Inputer::get_info()
+bool Cin_Data_Inputer::get_info(string &info)
 {
-    string info = "";
     cin >> info;
-    return info;
+    return 0;
 }
