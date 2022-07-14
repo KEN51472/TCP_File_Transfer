@@ -1,6 +1,6 @@
 #include "file_data_reader.h"
 
-void File_Data_Reader::set(const string &file_path)
+void File_Data_Reader::set_path(const string &file_path)
 {
     path_ = file_path;
 }
@@ -18,18 +18,22 @@ int File_Data_Reader::open()
     return 0;
 }
 
-bool File_Data_Reader::get_info(char *buf, int a, int b, string &info)
+int File_Data_Reader::get_size()
 {
     size_ = lseek(fd_, 0, SEEK_END);
     lseek(fd_, 0, SEEK_SET);
     cout << "file_size : " << size_ << endl;
-    string size = to_string(size_);
-    memset(buf, 0, a);
-    const char *s1 = size.c_str();
-    char *s2 = const_cast<char *>(s1);
-    stpcpy(buf, s2);
-    stpcpy(buf + 16, basename(path_.c_str()));
-    info = size;
+    return size_;
+}
+
+bool File_Data_Reader::set_info(char *buf)
+{
+    value value;
+    value.set("file_name", basename(path_.c_str()))("file_size", size_);
+    string json = "{\"file_name\":\"" + string(basename(path_.c_str())) 
+                    + "\", \"file_size\":" + to_string(size_) + "}";
+    const char *js = json.c_str();
+    strcpy(buf, js);
     return 0;
 }
 
@@ -38,7 +42,7 @@ int File_Data_Reader::read(char *buf, any a ,int size)
     memset(buf, 0, size);
     int left = size;
     while (left > 0) {
-        int rn = ::read(fd_, buf + size - left, size);
+        int rn = ::read(fd_, buf + size - left, left);
         left -= rn;
         if (rn < 0) {
             cout << "Reader using read error...\t" << "errno : " << errno << endl;

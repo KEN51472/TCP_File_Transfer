@@ -20,12 +20,27 @@ int Remote_Data_Reader::read(char *buf, any a, int size)
     return 0;
 }
 
-bool Remote_Data_Reader::get_info(char *buf, int a, int b, string &info)
-{
-    for (int i = a; i < b; i++) {
+string Remote_Data_Reader::get_name(char *buf)
+{   
+    string info = "";
+    for (int i = 0; i < 1024; i++) {
         info += buf[i];
     }
-    
-    return 0;
+    value v;
+    construct(info, v);    
+    cout << v << endl;
+    value::object_iterator iter= v.begin_object();
+    string name = iter->value();
+    cout << name <<endl;  
+    ++iter;
+    size_ = iter->value().get_as<int>();
+    cout << size_ <<endl;
+   
+    return name;
+}
+
+int Remote_Data_Reader::get_size()
+{
+    return size_;
 }
 

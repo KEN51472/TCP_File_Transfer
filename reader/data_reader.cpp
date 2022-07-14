@@ -1,11 +1,11 @@
 #include "data_reader.h"
 
-int Data_Reader::read(char *buf, any a, int size)
+string Data_Reader::get_name(char *buf)
 {
     return 0;
 }
 
-bool Data_Reader::get_info(char *buf, int a, int b, string &info)
+bool Data_Reader::set_info(char *buf)
 {
     return 0;
 }
@@ -15,7 +15,7 @@ int Data_Reader::open()
     return 0;
 }
 
-void Data_Reader::set(const string &file_path)
+void Data_Reader::set_path(const string &file_path)
 {
 
 }

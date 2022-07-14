@@ -12,15 +12,15 @@ using namespace std;
 
 #define SERV_PORT 9877
 
-class Session
+class Client_Session
 {
 public:
-    Session()
+    Client_Session()
     {
 
     };
 
-    ~Session()
+    ~Client_Session()
     {
 
     };

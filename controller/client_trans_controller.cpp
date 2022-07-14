@@ -4,7 +4,11 @@ int Client_Trans_Controller::init()
 {   
     cout << "Please enter the server address: " << endl;
     string address = "";
-    inputer_->get_info(address);
+    if (inputer_->get_address(address) < 0) {
+        cout << "Controller using get error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+    
     writer_->set(address);
     if (writer_->open("0", 0) < 0) {
         cout << "Controller using connect error...\t" << "errno : " << errno << endl;
@@ -13,8 +17,12 @@ int Client_Trans_Controller::init()
 
     cout << "Please enter the path of the file to be transferred: " << endl;
     string path = "";
-    inputer_->get_info(path); 
-    reader_->set(path);
+    if (inputer_->get_path(path) < 0) {
+        cout << "Controller using get error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+     
+    reader_->set_path(path);
     if (reader_->open() < 0) {
         cout << "Controller using open error...\t" << "errno : " << errno << endl;
         return -1;
@@ -26,9 +34,13 @@ int Client_Trans_Controller::init()
 int Client_Trans_Controller::start()
 {   
     char buf[BUFFER_SIZE] = {0};
-    string info = "";
-    reader_->get_info(buf, BUFFER_SIZE, 0, info);
-    size_ = stoi(info);
+    size_ = reader_->get_size();
+    reader_->set_info(buf);
+   
+    if (size_ == 0) {
+        cout << "Empty file trans..." << endl;
+        return 0;
+    }
     
     if (writer_->write(buf, 0, INFO_SIZE) < 0) {
         cout << "Controller using write error...\t" << "errno : " << errno << endl;
@@ -37,30 +49,41 @@ int Client_Trans_Controller::start()
 
     int sent = 0;
     while(1) {
-        int rn = reader_->read(buf, 0, BUFFER_SIZE);
-        if (rn < 0) {
-            cout << "Writer using function write error...\t" << "errno : " << errno << endl;
-            return -1;
-        }
-
-        if (rn == 0) {
-            if (size_ != 0) {
-                cout << "Trans Success!!!" << endl;
+        int left = BUFFER_SIZE;
+        while (left > 0) {
+            int rn = reader_->read(buf + BUFFER_SIZE - left, 0, left);
+            if (rn == -1) {
+                cout << "Controller using function read error...\t" << "errno : " << errno << endl;
+                return -1;
+            }
+        
+            left -= rn;
+            if (left == 0 || rn == 0) {
                 break;
             }
-
-            cout << "Empty file trans..." << endl;
-            return 0;
+        }
+        
+        int rn = BUFFER_SIZE - left;
+        left = rn;
+        while (left > 0) {
+            int wn = writer_->write(buf + rn - left, 0, left);
+            if (wn == -1) {
+                cout << "Controller using function write error...\t" << "errno : " << errno << endl;
+                return -1;
+            }
+        
+            left -= wn;
+            if (left == 0) {
+                break;
+            }
         }
 
-        int wn = writer_->write(buf, 0, rn); 
-        if (wn < 0) {
-            cout << "Controller using write error...\t" << "errno : " << errno << endl;
-            return -1;
-        }
-
-        sent += wn;
+        sent += (rn - left);
         cout << "Uploading ... " << (float) sent / size_ * 100 << "%" << endl;
+        if (sent == size_) {
+            cout << "trans success !!" << endl;
+            break;
+        }
     }
 
     return 0;

@@ -94,7 +94,10 @@ launch.json
                 "type": "cppdbg",
                 "request": "launch",
                 "program": "${workspaceFolder}/client",
-                "args": [],
+                "args": [
+                    "-g",
+                    "${workspaceFolder}/client"
+                ],
                 "stopAtEntry": false,
                 "cwd": "${fileDirname}",
                 "environment": [],
@@ -118,7 +121,10 @@ launch.json
                 "type": "cppdbg",
                 "request": "launch",
                 "program": "${workspaceFolder}/server",
-                "args": [],
+                "args": [
+                    "-g",
+                    "${workspaceFolder}/server"
+                ],
                 "stopAtEntry": false,
                 "cwd": "${fileDirname}",
                 "environment": [],

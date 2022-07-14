@@ -5,6 +5,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "data_reader.h"
+#include "io.hpp"
+
+using namespace ciere::json;
 
 class File_Data_Reader : public Data_Reader
 {
@@ -20,9 +23,10 @@ public:
     };
 
     int open();
-    bool get_info(char *buf, int a, int b, string &info);
+    int get_size();
+    bool set_info(char *buf);
     int read(char *buf, any a, int size);
-    void set(const string &file_path);
+    void set_path(const string &file_path);
     int destroy();
 
 private:

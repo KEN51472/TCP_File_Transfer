@@ -1,6 +1,11 @@
 #include "data_inputer.h"
 
-bool Data_Inputer::get_info(string &info)
+bool Data_Inputer::get_address(string &address)
+{
+    return 0;
+}
+
+bool Data_Inputer::get_path(string &path)
 {
     return 0;
 }

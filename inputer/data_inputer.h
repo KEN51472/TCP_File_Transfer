@@ -20,7 +20,8 @@ public:
 
     };
 
-    virtual bool get_info(string &info);
+    virtual bool get_address(string &address);
+    virtual bool get_path(string &path);
     virtual int init();
     virtual any start();
 };

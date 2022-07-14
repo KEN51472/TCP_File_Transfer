@@ -2,13 +2,13 @@
 
 using namespace std;
 
-int Session::set(const string &address)
+int Client_Session::set(const string &address)
 {
     serv_addr_ = address;
     return 0;
 }
 
-int Session::open()
+int Client_Session::open()
 {
     struct sockaddr_in servaddr;
     sock_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -33,7 +33,7 @@ int Session::open()
     return 0;
 }
 
-int Session::write(char *buf, int size)
+int Client_Session::write(char *buf, int size)
 {
     int left = size;
     while (left > 0) {
@@ -52,7 +52,7 @@ int Session::write(char *buf, int size)
     return 0;
 }
 
-int Session::destroy()
+int Client_Session::destroy()
 {   
     if (sock_ > 0) {
         close(sock_);

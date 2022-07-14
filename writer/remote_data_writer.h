@@ -26,7 +26,7 @@ public:
     int destroy(any a);  
 
 private:
-    Session s_;
+    Client_Session cs_;
 };
 
 #endif

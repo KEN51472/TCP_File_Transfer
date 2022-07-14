@@ -4,12 +4,12 @@ using namespace std;
 
 void Remote_Data_Writer::set(const string &address)
 {
-    s_.set(address);
+    cs_.set(address);
 }
 
 int Remote_Data_Writer::open(const string &name, any a)
 {   
-    int ret = s_.open();
+    int ret = cs_.open();
     if (ret < 0) {
         cout << "Writer connect to server error...\t" << "errno : " << errno << endl;
         return -1;
@@ -22,7 +22,7 @@ int Remote_Data_Writer::write(char *buf, any a, int size)
 {   
     int left = size;
     while (left > 0) {
-        int wn = s_.write(buf + size - left, left);
+        int wn = cs_.write(buf + size - left, left);
         if (wn == -1) {
             cout << "Writer using function write error...\t" << "errno : " << errno << endl;
             return -1;
@@ -39,5 +39,5 @@ int Remote_Data_Writer::write(char *buf, any a, int size)
 
 int Remote_Data_Writer::destroy(any a)
 {
-    return s_.destroy();
+    return cs_.destroy();
 }

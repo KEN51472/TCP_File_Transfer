@@ -17,7 +17,8 @@ public:
 
     };
 
-    bool get_info(string &info);
+    bool get_address(string &address);
+    bool get_path(string &path);
 };
 
 #endif

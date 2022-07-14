@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include "data_reader.h"
 #include "io_session.h"
+#include "io.hpp"
+
+using namespace ciere::json;
 
 class Remote_Data_Reader : public Data_Reader
 {
@@ -20,8 +23,9 @@ public:
     };
 
     int read(char *buf, any a, int size);
-    bool get_info(char *buf, int a, int b, string &info);
-    
+    string get_name(char *buf);
+    int get_size();
+
 private:
     int size_;
 };
