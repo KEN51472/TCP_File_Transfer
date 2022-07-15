@@ -61,6 +61,10 @@ tasks.json
                     "${fileDirname}/controller",
                     "-I",
                     "${fileDirname}/session",
+                    "-L",
+                    "${fileDirname}/json_spirit/build",
+                    "-l",
+                    "json",
                     "-lpthread"
                 ],
                 "options": {
