@@ -27,5 +27,5 @@ $(client_obj) : %.o : %.cpp
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean :
-	rm $(server_obj) $(client_obj)
+	rm $(server_obj) $(client_obj) $(public_obj)
 
