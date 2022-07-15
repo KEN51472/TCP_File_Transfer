@@ -9,6 +9,9 @@
 
 using namespace ciere::json;
 
+#define BUFFER_SIZE 8192
+#define INFO_SIZE   1024
+
 class File_Data_Reader : public Data_Reader
 {
 public:
@@ -22,17 +25,19 @@ public:
        
     };
 
-    int open();
+    int open(bool type);
     int get_size();
-    bool set_info(char *buf);
+    string get_name(char *buf);
     int read(char *buf, any a, int size);
-    void set_path(const string &file_path);
+    void set(const string &file_path, const string &json_path);
     int destroy();
 
 private:
-    string path_;
+    string json_path_;
+    string file_path_;
     int fd_;
-    int size_;
+    int jfd_;
+    value v_;
 };
 
 #endif

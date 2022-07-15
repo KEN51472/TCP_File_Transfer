@@ -19,6 +19,7 @@ public:
 
     bool get_address(string &address);
     bool get_path(string &path);
+    bool get_json(string &path);
 };
 
 #endif

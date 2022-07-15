@@ -15,15 +15,27 @@ int Client_Trans_Controller::init()
         return -1;
     }
 
-    cout << "Please enter the path of the file to be transferred: " << endl;
-    string path = "";
-    if (inputer_->get_path(path) < 0) {
+    cout << "Please enter the path of the file to trans: " << endl;
+    string file_path = "";
+    if (inputer_->get_path(file_path) < 0) {
         cout << "Controller using get error...\t" << "errno : " << errno << endl;
         return -1;
     }
-     
-    reader_->set_path(path);
-    if (reader_->open() < 0) {
+
+    cout << "Please enter the path of the json file: " << endl;
+    string json_path = "";
+    if (inputer_->get_json(json_path) < 0) {
+        cout << "Controller using get error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+
+    reader_->set(file_path, json_path);
+    if (reader_->open(0) < 0) {
+        cout << "Controller using open error...\t" << "errno : " << errno << endl;
+        return -1;
+    }
+
+    if (reader_->open(1) < 0) {
         cout << "Controller using open error...\t" << "errno : " << errno << endl;
         return -1;
     }
@@ -34,8 +46,9 @@ int Client_Trans_Controller::init()
 int Client_Trans_Controller::start()
 {   
     char buf[BUFFER_SIZE] = {0};
+    reader_->read(buf, 1, INFO_SIZE);  
+    reader_->get_name(buf);
     size_ = reader_->get_size();
-    reader_->set_info(buf);
    
     if (size_ == 0) {
         cout << "Empty file trans..." << endl;

@@ -13,3 +13,10 @@ bool Cin_Data_Inputer::get_path(string &path)
     cin >> path;
     return 0;
 }
+
+bool Cin_Data_Inputer::get_json(string &path)
+{
+    cin >> path;
+    return 0;
+}
+

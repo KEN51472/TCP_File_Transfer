@@ -28,13 +28,11 @@ string Remote_Data_Reader::get_name(char *buf)
     }
     value v;
     construct(info, v);    
-    cout << v << endl;
+    cout << "JSON :  " << v << endl;
     value::object_iterator iter= v.begin_object();
     string name = iter->value();
-    cout << name <<endl;  
     ++iter;
     size_ = iter->value().get_as<int>();
-    cout << size_ <<endl;
    
     return name;
 }

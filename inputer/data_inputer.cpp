@@ -10,6 +10,11 @@ bool Data_Inputer::get_path(string &path)
     return 0;
 }
 
+bool Data_Inputer::get_json(string &path)
+{
+    return 0;
+}
+
 int Data_Inputer::init()
 {
     return 0;

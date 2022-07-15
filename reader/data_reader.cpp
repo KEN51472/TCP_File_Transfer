@@ -1,21 +1,11 @@
 #include "data_reader.h"
 
-string Data_Reader::get_name(char *buf)
+int Data_Reader::open(bool type)
 {
     return 0;
 }
 
-bool Data_Reader::set_info(char *buf)
-{
-    return 0;
-}
-
-int Data_Reader::open()
-{
-    return 0;
-}
-
-void Data_Reader::set_path(const string &file_path)
+void Data_Reader::set(const string &file_path, const string &json_path)
 {
 
 }

@@ -21,12 +21,11 @@ public:
 
     };
 
-    virtual int open();
-    virtual string get_name(char *buf);
+    virtual int open(bool type);
+    virtual string get_name(char *buf) = 0;
     virtual int get_size() = 0;
-    virtual bool set_info(char *buf);
     virtual int read(char *buf, any a, int size) = 0;
-    virtual void set_path(const string &file_path);
+    virtual void set(const string &file_path, const string &json_path);
     virtual int destroy();
 };
 
