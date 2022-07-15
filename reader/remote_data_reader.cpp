@@ -23,7 +23,7 @@ int Remote_Data_Reader::read(char *buf, any a, int size)
 string Remote_Data_Reader::get_name(char *buf)
 {   
     string info = "";
-    for (int i = 0; i < 1024; i++) {
+    for (int i = 0; i < INFO_SIZE; i++) {
         info += buf[i];
     }
     value v;

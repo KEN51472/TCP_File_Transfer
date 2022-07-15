@@ -9,6 +9,8 @@
 
 using namespace ciere::json;
 
+#define INFO_SIZE 1024
+
 class Remote_Data_Reader : public Data_Reader
 {
 public:

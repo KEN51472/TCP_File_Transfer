@@ -46,7 +46,20 @@ int Client_Trans_Controller::init()
 int Client_Trans_Controller::start()
 {   
     char buf[BUFFER_SIZE] = {0};
-    reader_->read(buf, 1, INFO_SIZE);  
+    int left = INFO_SIZE;
+    while (left > 0) {
+        int rn = reader_->read(buf + INFO_SIZE - left, 1, left);
+        if (rn == -1) {
+            cout << "Controller using function read error...\t" << "errno : " << errno << endl;
+            return -1;
+        }
+        
+        left -= rn;
+        if (left == 0 || rn == 0) {
+            break;
+        }
+    }
+ 
     reader_->get_name(buf);
     size_ = reader_->get_size();
    
