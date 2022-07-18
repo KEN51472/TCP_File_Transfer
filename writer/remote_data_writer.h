@@ -15,19 +15,18 @@ public:
 
     };
 
-    ~Remote_Data_Writer()
+    virtual ~Remote_Data_Writer()
     {
         
     };
 
-    int set(const string &address);
+    void set(const string &address);
     int open(const string &name, any a);
     int write(char *buf, any a, int size);
     int destroy(any a);  
 
 private:
-    int finished_;
-    Session s_;
+    Client_Session cs_;
 };
 
 #endif

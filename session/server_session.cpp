@@ -11,6 +11,7 @@ int Server_Session::init()
 
     cout << "Create socket success...\tsocket:" << sock_ << endl;
 
+    struct sockaddr_in servaddr;
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(SERV_PORT);
@@ -36,14 +37,15 @@ int Server_Session::init()
 
 int Server_Session::start()
 {
-    clilen = sizeof(cliaddr);
-    accept_sock_ = accept(sock_, (SA *)&cliaddr, &clilen);
-    if (accept_sock_ == -1) {
+    struct sockaddr_in cliaddr;
+    socklen_t clilen = sizeof(cliaddr);
+    int accept_sock = accept(sock_, (SA *)&cliaddr, &clilen);
+    if (accept_sock == -1) {
         cout << "Accept error...\t"
              << "errno : " << errno << endl;
         return -1;
     }
 
-    cout << "Connect accept_sock " << accept_sock_ << " success..." << endl;
-    return accept_sock_;
+    cout << "Connect accept_sock " << accept_sock << " success..." << endl;
+    return accept_sock;
 }

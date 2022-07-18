@@ -7,12 +7,12 @@
 #include "data_inputer.h"
 
 #define CHECK(p)                            \
-do{                                         \
-    if(!p) {                                \
+do {                                         \
+    if (!p) {                                \
         cout << p <<" null ptr" << endl;    \
         return -1;                          \
     }                                       \
-}while(0) 
+} while(0) 
 
 int main()
 {

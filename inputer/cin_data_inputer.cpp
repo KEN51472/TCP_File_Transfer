@@ -2,9 +2,21 @@
 
 using namespace std;
 
-string Cin_Data_Inputer::get_info()
+bool Cin_Data_Inputer::get_address(string &address)
 {
-    string info = "";
-    cin >> info;
-    return info;
+    cin >> address;
+    return 0;
 }
+
+bool Cin_Data_Inputer::get_path(string &path)
+{
+    cin >> path;
+    return 0;
+}
+
+bool Cin_Data_Inputer::get_json(string &path)
+{
+    cin >> path;
+    return 0;
+}
+

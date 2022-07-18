@@ -61,6 +61,10 @@ tasks.json
                     "${fileDirname}/controller",
                     "-I",
                     "${fileDirname}/session",
+                    "-L",
+                    "${fileDirname}/json_spirit/build",
+                    "-l",
+                    "json",
                     "-lpthread"
                 ],
                 "options": {
@@ -93,8 +97,11 @@ launch.json
                 "name": "Client",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${workspaceFolder}/tcpClient/client",
-                "args": [],
+                "program": "${workspaceFolder}/client",
+                "args": [
+                    "-g",
+                    "${workspaceFolder}/client"
+                ],
                 "stopAtEntry": false,
                 "cwd": "${fileDirname}",
                 "environment": [],
@@ -117,8 +124,11 @@ launch.json
                 "name": "Server",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${workspaceFolder}/tcpServer/server",
-                "args": [],
+                "program": "${workspaceFolder}/server",
+                "args": [
+                    "-g",
+                    "${workspaceFolder}/server"
+                ],
                 "stopAtEntry": false,
                 "cwd": "${fileDirname}",
                 "environment": [],

@@ -12,12 +12,14 @@ public:
 
     };
 
-    ~Cin_Data_Inputer()
+    virtual ~Cin_Data_Inputer()
     {
 
     };
 
-    string get_info();
+    bool get_address(string &address);
+    bool get_path(string &path);
+    bool get_json(string &path);
 };
 
 #endif

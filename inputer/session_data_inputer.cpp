@@ -1,12 +1,12 @@
 #include "session_data_inputer.h"
 
 #define CHECK(p)                            \
-do{                                         \
-    if(!p) {                                \
+do {                                         \
+    if (!p) {                                \
         cout << p <<" null ptr" << endl;    \
         return -1;                          \
     }                                       \
-}while(0) 
+} while (0) 
 
 int Session_Data_Inputer::init()
 {
@@ -28,7 +28,7 @@ any Session_Data_Inputer::start()
         return -1;
     }
     
-    Io_Session *is = new Io_Session(ret);
+    IO_Session *is = new IO_Session(ret);
     CHECK(is);
     any a = is;
     return a;

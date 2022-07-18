@@ -22,7 +22,7 @@ public:
                             Data_Writer *w_impl):
                             inputer_(i_impl),
                             reader_(r_impl), 
-                            writer_(w_impl){}
+                            writer_(w_impl) {}
 
     ~Server_Trans_Controller()
     {
@@ -31,7 +31,7 @@ public:
 
     int init();
     int start();
-    int trans(Io_Session *is);
+    int trans(IO_Session *is);
     
 private:
     Data_Inputer *inputer_;

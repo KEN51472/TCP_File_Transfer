@@ -33,10 +33,6 @@ public:
 
 private:
     int sock_;
-    int accept_sock_;
-    socklen_t clilen;
-    struct sockaddr_in cliaddr;
-    struct sockaddr_in servaddr;
 };
 
 #endif

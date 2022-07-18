@@ -20,7 +20,9 @@ public:
 
     };
 
-    virtual string get_info();
+    virtual bool get_address(string &address);
+    virtual bool get_path(string &path);
+    virtual bool get_json(string &path);
     virtual int init();
     virtual any start();
 };

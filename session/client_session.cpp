@@ -2,13 +2,13 @@
 
 using namespace std;
 
-int Session::set(const string &address)
+int Client_Session::set(const string &address)
 {
     serv_addr_ = address;
     return 0;
 }
 
-int Session::open()
+int Client_Session::open()
 {
     struct sockaddr_in servaddr;
     sock_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -33,30 +33,28 @@ int Session::open()
     return 0;
 }
 
-int Session::write(char *buf, int size)
+int Client_Session::write(char *buf, int size)
 {
     int left = size;
-    int finished = 0;
     while (left > 0) {
-        int wn = ::write(sock_, buf, left);
+        int wn = ::write(sock_, buf + size - left, left);
         if (wn < 0) {
             cout << "Session using function write error...\t" << "errno : " << errno << endl;
             return -1;
         }
 
         left -= wn;
-        finished += wn;
         if (left == 0) {
-            break;
+            return size - left;
         }
     }
 
-    return finished;
+    return 0;
 }
 
-int Session::destroy()
+int Client_Session::destroy()
 {   
-    if(sock_ > 0) {
+    if (sock_ > 0) {
         close(sock_);
         cout << "sock " << sock_ << " closed success..." << endl;
     }

@@ -1,8 +1,8 @@
 #include "data_writer.h"
 
-int Data_Writer::set(const string &address)
+void Data_Writer::set(const string &address)
 {
-    return 0;
+
 }
 
 int Data_Writer::open(const string &name, any a)
