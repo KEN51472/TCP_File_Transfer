@@ -26,19 +26,18 @@ string Remote_Data_Reader::get_name(char *buf)
     for (int i = 0; i < INFO_SIZE; i++) {
         info += buf[i];
     }
-    value v;
-    construct(info, v);    
-    cout << "JSON :  " << v << endl;
-    value::object_iterator iter= v.begin_object();
-    string name = iter->value();
-    ++iter;
-    size_ = iter->value().get_as<int>();
-   
+    construct(info, v_);    
+    cout << "JSON :  " << v_ << endl;
+    value::object_iterator iter= v_.begin_object();
+    string name = iter->value(); 
     return name;
 }
 
 int Remote_Data_Reader::get_size()
 {
-    return size_;
+    value::object_iterator iter= v_.begin_object();
+    ++iter;
+    int size = iter->value().get_as<int>();
+    return size;
 }
 

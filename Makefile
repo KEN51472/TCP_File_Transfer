@@ -15,16 +15,16 @@ all : server client
 .PHONY : all
 
 server : $(server_obj) $(public_obj)
-	$(CC) -o server $(server_obj) $(public_obj) -L ./json_spirit/build -l json -lpthread
+	$(CC) -g -o server $(server_obj) $(public_obj) -L ./json_spirit/build -l json -lpthread
 
 $(server_obj) $(public_obj) : %.o : %.cpp
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -g -c $(CFLAGS) $< -o $@
 
 client : $(client_obj) $(public_obj)
-	$(CC) -o client $(client_obj) $(public_obj) -L ./json_spirit/build -l json
+	$(CC) -g -o client $(client_obj) $(public_obj) -L ./json_spirit/build -l json
 
 $(client_obj) : %.o : %.cpp
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -g -c $(CFLAGS) $< -o $@
 
 clean :
 	rm $(server_obj) $(client_obj) $(public_obj)

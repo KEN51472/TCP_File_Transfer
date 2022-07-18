@@ -29,6 +29,6 @@ public:
     int get_size();
 
 private:
-    int size_;
+    value v_;
 };
 #endif
